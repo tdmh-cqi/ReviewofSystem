@@ -109,6 +109,7 @@
                             <label class="checkbox-group"><input type="checkbox" data-ros="Weight Loss"> Weight Loss</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Body Malaise"> Body Malaise</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Anorexia"> Anorexia</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -128,6 +129,7 @@
                             <label class="checkbox-group"><input type="checkbox" data-ros="Deafness"> Deafness</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Sore Throat"> Sore Throat</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Difficulty Swallowing"> Difficulty Swallowing</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -140,6 +142,7 @@
                             <label class="checkbox-group"><input type="checkbox" data-ros="Dyspnea"> Dyspnea (DOB)</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Hemoptysis"> Hemoptysis</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Cyanosis"> Cyanosis</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -151,6 +154,7 @@
                             <label class="checkbox-group"><input type="checkbox" data-ros="Chest Pain"> Chest Pain</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Palpitations"> Palpitations</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Orthopnea"> Orthopnea</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -168,6 +172,7 @@
                             <label class="checkbox-group"><input type="checkbox" data-ros="Heart Burn"> Heart Burn</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Flatulence"> Flatulence</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Abdominal Distention"> Abdominal Distention</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -185,6 +190,7 @@
                             <label class="checkbox-group"><input type="checkbox" data-ros="Numbness"> Numbness/Loss of Sensation</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Paralysis"> Paralysis</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Tremors"> Tremors</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -194,9 +200,62 @@
                         <div class="space-y-1">
                             <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Cold Sweats"> Cold Sweats</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Polyphagia/Polydypsia"> Polyphagia/Polydypsia</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Heat/Cold Intolerance"> Heat/Cold Intolerance</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Polyphagia/Polydipsia/Polyuria"> Polyphagia/Polydipsia/Polyuria</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Intolerance to heat and cold"> Intolerance to heat and cold</label>
                             <label class="checkbox-group"><input type="checkbox" data-ros="Fatigue"> Fatigue</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
+                        </div>
+                    </div>
+
+                    <!-- Genitourinary -->
+                    <div class="ros-category" data-group="ros_gu">
+                        <label class="text-blue-700 mb-2 block">Genitourinary</label>
+                        <div class="space-y-1">
+                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Dysuria"> Dysuria</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Frequency of urination"> Frequency of urination</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Hematuria"> Hematuria</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Urgency/Dribbling"> Urgency/Dribbling</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
+                        </div>
+                    </div>
+
+                    <!-- Integumentary -->
+                    <div class="ros-category lg:row-span-2" data-group="ros_integumentary">
+                        <label class="text-blue-700 mb-2 block">Integumentary</label>
+                        <div class="space-y-1">
+                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Jaundice"> Jaundice</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Edema of lower extremities"> Edema of lower extremities</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Rash"> Rash</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Pallor"> Pallor</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Itchyness"> Itchyness</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Ulcerations"> Ulcerations</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Scaling"> Scaling</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Ecchymosis"> Ecchymosis</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
+                        </div>
+                    </div>
+
+                    <!-- Hematology/Lymphatics -->
+                    <div class="ros-category" data-group="ros_heme_lymph">
+                        <label class="text-blue-700 mb-2 block">Hematology/Lymphatics</label>
+                        <div class="space-y-1">
+                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Hematoma/Ecchymosis"> Hematoma/Ecchymosis</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Lymphadenopathy"> Lymphadenopathy</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
+                        </div>
+                    </div>
+
+                    <!-- Psychosocial -->
+                    <div class="ros-category" data-group="ros_psych">
+                        <label class="text-blue-700 mb-2 block">Psychosocial</label>
+                        <div class="space-y-1">
+                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Depressed"> Depressed</label>
+                            <label class="checkbox-group"><input type="checkbox" data-ros="Excited"> Excited</label>
+                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
                         </div>
                     </div>
 
@@ -251,8 +310,8 @@
                 <div class="section-title">OB-GYNE History</div>
                 <div class="grid-3">
                     <div><label>Last Menstrual Period</label><input type="date" id="ob_lmp"></div>
-                    <div><label>OB Score (G_P_L_)</label><input type="text" id="ob_score" placeholder="e.g. G2P1 (1001)"></div>
-                    <div class="flex items-end pb-1"><label class="checkbox-group"><input type="checkbox" id="ob_na"> Not Applicable</label></div>
+                    <div><label>OB Score G_P_ (TPAL)</label><input type="text" id="ob_score" placeholder="e.g. G2P1 (1001)"></div>
+                    <div class="flex items-end pb-1"><label class="checkbox-group"><input type="checkbox" id="ob_na"> Not Applicable (NA)</label></div>
                 </div>
             </div>
 
@@ -273,29 +332,47 @@
                 </div>
 
                 <div class="space-y-1">
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-center">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest">Skin/Extremity</span>
-                        <select id="pe_skin"><option>Essentially Normal</option><option>Edema/Swelling</option><option>Cyanosis</option><option>Pallor</option><option>Jaundice</option><option>Clubbing</option></select>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Skin/Extremity</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_skin"><option>Essentially Normal</option><option>Edema/Swelling</option><option>Cyanosis</option><option>Pallor</option><option>Jaundice</option><option>Clubbing</option><option>Others</option></select>
+                            <input type="text" id="pe_skin_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-center">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest">HEENT</span>
-                        <select id="pe_heent"><option>Essentially Normal</option><option>Pale Conjunctivae</option><option>Icteric Sclerae</option><option>Septal Deviation</option><option>Neck Mass</option></select>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">HEENT</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_heent"><option>Essentially Normal</option><option>Pale Conjunctivae</option><option>Icteric Sclerae</option><option>Septal Deviation</option><option>Neck Mass</option><option>Others</option></select>
+                            <input type="text" id="pe_heent_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-center">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest">Chest/Respiratory</span>
-                        <select id="pe_chest"><option>Essentially Normal</option><option>Rales/Crackles</option><option>Wheezes</option><option>Asymmetric Expansion</option></select>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Chest/Respiratory</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_chest"><option>Essentially Normal</option><option>Rales/Crackles</option><option>Wheezes</option><option>Asymmetric Expansion</option><option>Others</option></select>
+                            <input type="text" id="pe_chest_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-center">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest">Cardiovascular</span>
-                        <select id="pe_cvs"><option>Essentially Normal</option><option>Irregular Rhythm</option><option>Murmur</option><option>Heaves/Thrills</option></select>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Cardiovascular</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_cvs"><option>Essentially Normal</option><option>Irregular Rhythm</option><option>Murmur</option><option>Heaves/Thrills</option><option>Others</option></select>
+                            <input type="text" id="pe_cvs_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-center">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest">Abdomen</span>
-                        <select id="pe_abd"><option>Essentially Normal</option><option>Abnormal Tenderness</option><option>Palpable Mass</option><option>Rigidity</option><option>Hyperactive BS</option></select>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Abdomen</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_abd"><option>Essentially Normal</option><option>Abnormal Tenderness</option><option>Palpable Mass</option><option>Rigidity</option><option>Hyperactive BS</option><option>Others</option></select>
+                            <input type="text" id="pe_abd_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-center">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest">Neurologic</span>
-                        <select id="pe_neuro"><option>Essentially Normal</option><option>Abnormal Reflexes</option><option>Abnormal Gait</option><option>Paralysis</option><option>Tremors</option></select>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Neurologic</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_neuro"><option>Essentially Normal</option><option>Abnormal Reflexes</option><option>Abnormal Gait</option><option>Paralysis</option><option>Tremors</option><option>Others</option></select>
+                            <input type="text" id="pe_neuro_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -399,7 +476,11 @@
                 { selector: '[data-group="ros_cardio"]', label: 'CARDIOVASCULAR' },
                 { selector: '[data-group="ros_gi"]', label: 'ABDOMEN (GI)' },
                 { selector: '[data-group="ros_neuro"]', label: 'NEUROLOGIC' },
-                { selector: '[data-group="ros_endocrine"]', label: 'ENDOCRINE' }
+                { selector: '[data-group="ros_endocrine"]', label: 'ENDOCRINE' },
+                { selector: '[data-group="ros_gu"]', label: 'GENITOURINARY' },
+                { selector: '[data-group="ros_integumentary"]', label: 'INTEGUMENTARY' },
+                { selector: '[data-group="ros_heme_lymph"]', label: 'HEMATOLOGY/LYMPHATICS' },
+                { selector: '[data-group="ros_psych"]', label: 'PSYCHOSOCIAL' }
             ];
 
             let summary = `[HISTORY OF PRESENT ILLNESS]\n`;
@@ -409,18 +490,27 @@
             summary += `[REVIEW OF SYSTEMS]\n`;
             rosGroups.forEach(group => {
                 const container = document.querySelector(group.selector);
-                const master = container.querySelector('.ros-master');
-                const selected = Array.from(container.querySelectorAll('input:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-ros'));
-                const status = master.checked ? 'Unremarkable' : (selected.length ? `Significant Findings: ${selected.join(', ')}` : 'Not Assessed');
-                summary += `${group.label}: ${status}\n`;
+                if (container) {
+                    const master = container.querySelector('.ros-master');
+                    const selected = Array.from(container.querySelectorAll('input[type="checkbox"]:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-ros'));
+                    
+                    const otherInput = container.querySelector('.ros-specific-other');
+                    if (otherInput && otherInput.value.trim() !== '') {
+                        selected.push(`Others: ${otherInput.value.trim()}`);
+                    }
+
+                    const status = master.checked ? 'Unremarkable' : (selected.length ? `Significant Findings: ${selected.join(', ')}` : 'Not Assessed');
+                    summary += `${group.label}: ${status}\n`;
+                }
             });
+            
             summary += `\n`;
 
             // PMH
             const pmhMaster = document.querySelector('[data-pmh="Unremarkable"]');
             const pmhChecked = Array.from(document.querySelectorAll('[data-pmh]:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-pmh'));
             const pmhOther = document.getElementById('pmh_others').value;
-            if(pmhOther) pmhChecked.push(pmhOther);
+            if(pmhOther) pmhChecked.push(`Others: ${pmhOther}`);
             summary += `[PAST MEDICAL HISTORY]\n${pmhMaster.checked ? 'Unremarkable' : (pmhChecked.length ? pmhChecked.join(', ') : 'Not Specified')}\n\n`;
 
             summary += `[MEDICATION MAINTENANCE]\n${maintenance ? maintenance.trim() : 'None Reported'}\n\n`;
@@ -429,7 +519,7 @@
             const fmhMaster = document.querySelector('[data-fmh="Unremarkable"]');
             const fmhChecked = Array.from(document.querySelectorAll('[data-fmh]:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-fmh'));
             const fmhOther = document.getElementById('fmh_others').value;
-            if(fmhOther) fmhChecked.push(fmhOther);
+            if(fmhOther) fmhChecked.push(`Others: ${fmhOther}`);
             summary += `[FAMILY MEDICAL HISTORY]\n${fmhMaster.checked ? 'Unremarkable' : (fmhChecked.length ? fmhChecked.join(', ') : 'Not Specified')}\n\n`;
 
             const obNa = document.getElementById('ob_na').checked;
@@ -437,17 +527,27 @@
                 const lmp = document.getElementById('ob_lmp').value;
                 const score = document.getElementById('ob_score').value;
                 if(lmp || score) summary += `[OB HISTORY]\nLMP: ${lmp || '--'} | OB Score: ${score || '--'}\n\n`;
+            } else {
+                summary += `[OB HISTORY]\nNot Applicable\n\n`;
             }
 
-            // Updated summary string to output SpO2 field
+            const getPE = (selectId, otherId) => {
+                const val = document.getElementById(selectId).value;
+                const other = document.getElementById(otherId) ? document.getElementById(otherId).value.trim() : '';
+                if (val === 'Others' && other) return other;
+                if (other) return `${val} (Others: ${other})`;
+                return val;
+            };
+
+            // Updated summary string to output SpO2 field and PE Others
             summary += `[PHYSICAL EXAMINATION]\n`;
             summary += `VITALS: BP ${vitals.bp || '--'} | PR ${vitals.pr || '--'} | RR ${vitals.rr || '--'} | T ${vitals.temp || '--'} | SpO2 ${vitals.o2 || '--'}% | WT ${vitals.wt || '--'}kg\n`;
-            summary += `SKIN/EXT: ${document.getElementById('pe_skin').value}\n`;
-            summary += `HEENT: ${document.getElementById('pe_heent').value}\n`;
-            summary += `CHEST/RESP: ${document.getElementById('pe_chest').value}\n`;
-            summary += `CARDIOVASCULAR: ${document.getElementById('pe_cvs').value}\n`;
-            summary += `ABDOMEN: ${document.getElementById('pe_abd').value}\n`;
-            summary += `NEUROLOGIC: ${document.getElementById('pe_neuro').value}\n\n`;
+            summary += `SKIN/EXT: ${getPE('pe_skin', 'pe_skin_others')}\n`;
+            summary += `HEENT: ${getPE('pe_heent', 'pe_heent_others')}\n`;
+            summary += `CHEST/RESP: ${getPE('pe_chest', 'pe_chest_others')}\n`;
+            summary += `CARDIOVASCULAR: ${getPE('pe_cvs', 'pe_cvs_others')}\n`;
+            summary += `ABDOMEN: ${getPE('pe_abd', 'pe_abd_others')}\n`;
+            summary += `NEUROLOGIC: ${getPE('pe_neuro', 'pe_neuro_others')}\n\n`;
 
             summary += `[ADMITTING DIAGNOSIS]\n`;
             summary += diagnosis ? diagnosis.trim() : "Awaiting Final Confirmation.";
