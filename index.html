@@ -368,6 +368,13 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
+                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Genitourinary</span>
+                        <div class="flex flex-col gap-2">
+                            <select id="pe_gu"><option>Essentially Normal</option><option>Blood on examining finger</option><option>Cervical dilation</option><option>Presence of abnormal vaginal/penile discharge</option><option>Lesions on external genitalia</option><option>Others</option></select>
+                            <input type="text" id="pe_gu_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
                         <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Neurologic</span>
                         <div class="flex flex-col gap-2">
                             <select id="pe_neuro"><option>Essentially Normal</option><option>Abnormal Reflexes</option><option>Abnormal Gait</option><option>Paralysis</option><option>Tremors</option><option>Others</option></select>
@@ -547,6 +554,7 @@
             summary += `CHEST/RESP: ${getPE('pe_chest', 'pe_chest_others')}\n`;
             summary += `CARDIOVASCULAR: ${getPE('pe_cvs', 'pe_cvs_others')}\n`;
             summary += `ABDOMEN: ${getPE('pe_abd', 'pe_abd_others')}\n`;
+            summary += `GENITOURINARY: ${getPE('pe_gu', 'pe_gu_others')}\n`;
             summary += `NEUROLOGIC: ${getPE('pe_neuro', 'pe_neuro_others')}\n\n`;
 
             summary += `[ADMITTING DIAGNOSIS]\n`;
