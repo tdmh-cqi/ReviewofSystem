@@ -3,591 +3,599 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Clinical Assessment Form </title>
+    <title>Dr. Lou Valmar T. Datu - Clinical Summary</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #1e293b; }
-        .form-section { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
-        .section-title { border-bottom: 2px solid #3b82f6; margin-bottom: 24px; padding-bottom: 12px; font-weight: 800; color: #1e3a8a; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.05em; display: flex; align-items: center; gap: 10px; }
-        .section-title svg { width: 22px; height: 22px; color: #3b82f6; }
-        label { font-size: 0.75rem; font-weight: 700; color: #64748b; display: block; margin-bottom: 6px; text-transform: uppercase; }
-        input, select, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 0.9rem; outline: none; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); background-color: #f8fafc; }
-        input:focus, select:focus, textarea:focus { border-color: #3b82f6; ring: 3px; ring-color: rgba(59, 130, 246, 0.15); background-color: white; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; font-size: 0.8rem; cursor: pointer; min-height: 28px; color: #334155; padding: 6px 8px; border-radius: 6px; transition: all 0.2s; border: 1px solid transparent; }
-        .checkbox-group:hover { background-color: #f1f5f9; border-color: #e2e8f0; }
-        .checkbox-group input { width: 18px; height: 18px; margin-top: 1px; cursor: pointer; border-radius: 4px; accent-color: #3b82f6; }
-        #summary-box { background: #0f172a; color: #f1f5f9; padding: 24px; border-radius: 10px; font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.7; border-left: 4px solid #3b82f6; }
-        .ros-category { padding: 16px; border: 1px solid #e2e8f0; border-radius: 10px; background-color: #ffffff; transition: all 0.2s; height: 100%; }
-        .ros-category:hover { border-color: #93c5fd; box-shadow: 0 4px 12px -2px rgba(0,0,0,0.05); }
-        .unremarkable-cb { font-weight: 800; color: #2563eb !important; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 10px; background-color: #eff6ff; }
-        .hpi-notepad { background-color: #fffdf5; border: 1px solid #fef3c7; font-family: inherit; line-height: 1.6; resize: vertical; min-height: 200px; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05); font-size: 1rem; }
+        body { font-family: 'Inter', sans-serif; }
         
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(15, 23, 42, 0.95);
-            z-index: 50;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(8px);
+        /* Smooth scrolling and transitions */
+        html { scroll-behavior: smooth; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            width: 90%;
-            max-w-md;
-            text-align: center;
+        
+        /* Toast Notification Animation */
+        @keyframes slideUp {
+            from { bottom: -50px; opacity: 0; }
+            to { bottom: 20px; opacity: 1; }
         }
-        #main-content {
-            display: none;
+        .toast-show {
+            animation: slideUp 0.3s ease-out forwards;
         }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="bg-slate-100 text-slate-800 min-h-screen p-4 md:p-8">
 
-    <div id="login-overlay">
-        <div class="login-box max-w-md">
-            <h2 class="text-2xl font-black text-slate-900 mb-2">ROD Access Gateway</h2>
-            <p class="text-sm text-slate-500 mb-6">Enter password to access the Clinical Assessment Form</p>
-            <div class="space-y-4">
-                <input type="password" id="rod-password" placeholder="Enter Password" class="text-center text-lg py-3" autofocus>
-                <div id="login-error" class="text-red-500 text-sm font-bold hidden mt-2">Incorrect Password</div>
-                <button onclick="checkPassword()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-md">
-                    Access Form
-                </button>
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <header class="bg-blue-800 text-white rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">Dr. Lou Valmar T. Datu</h1>
+                <h2 class="text-blue-200 mt-1">Clinical Summary System</h2>
             </div>
-        </div>
-    </div>
-
-    <div id="main-content" class="max-w-6xl mx-auto">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tight">Taytay Doctors Multispecialty Hospital</h1>
-            <p class="text-sm text-blue-600 font-bold tracking-[0.2em] uppercase mt-1">Review of System/Physical Examination</p>
-            <div class="mt-6 inline-flex items-center bg-white px-8 py-3 rounded-2xl shadow-sm border border-slate-200">
-                <span class="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse"></span>
-                <h2 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Digital Clinical Record Form</h2>
-            </div>
+            <button onclick="generateSummary()" class="mt-4 md:mt-0 bg-white text-blue-800 px-6 py-3 rounded-lg font-bold shadow hover:bg-blue-50 transition-colors">
+                Generate Summary
+            </button>
         </header>
 
-        <form id="medicalForm" class="space-y-8">
-            
-            <div class="form-section">
-                <div class="section-title">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    History of Present Illness (HPI)
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                <h3 class="text-lg font-bold text-slate-800">Patient Information</h3>
+            </div>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex flex-col">
+                    <label class="mb-1 text-sm font-semibold text-slate-600">Patient Name</label>
+                    <input type="text" id="pat_name" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <label>Narrative Typing Area</label>
-                <textarea id="hpi_narrative" class="hpi-notepad" placeholder="Type the patient's story here... (e.g., Patient presented with sharp epigastric pain associated with vomiting since yesterday...)" rows="8"></textarea>
-                <div class="flex items-center gap-2 mt-3 text-slate-400">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"></path></svg>
-                    <p class="text-[11px] italic font-medium">This text will be formatted as a paragraph in your EMR summary.</p>
+                <div class="flex flex-col">
+                    <label class="mb-1 text-sm font-semibold text-slate-600">Age</label>
+                    <input type="text" id="pat_age" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1 text-sm font-semibold text-slate-600">Sex</label>
+                    <select id="pat_sex" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                        <option value="">Select...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1 text-sm font-semibold text-slate-600">Date</label>
+                    <input type="date" id="pat_date" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
-
-            <div class="form-section">
-                <div class="section-title">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                    Review of Systems (ROS)
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <!-- Constitutional -->
-                    <div class="ros-category" data-group="ros_constitutional">
-                        <label class="text-blue-700 mb-2 block">Constitutional</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Fever"> Fever</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Weight Loss"> Weight Loss</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Body Malaise"> Body Malaise</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Anorexia"> Anorexia</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- HEENT -->
-                    <div class="ros-category lg:row-span-2" data-group="ros_heent">
-                        <label class="text-blue-700 mb-2 block">HEENT</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Ictericia"> Ictericia</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Redness of Conjunctiva"> Redness of Conjunctiva</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Blurring of Vision"> Blurring of Vision</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Eye Discharge"> Eye Discharge</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Mass on the Neck"> Mass on the Neck</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Epistaxis"> Epistaxis/Nose Bleed</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Loss of Smell"> Loss of Smell</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Tinnitus"> Tinnitus</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Deafness"> Deafness</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Sore Throat"> Sore Throat</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Difficulty Swallowing"> Difficulty Swallowing</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Respiratory -->
-                    <div class="ros-category" data-group="ros_respiratory">
-                        <label class="text-blue-700 mb-2 block">Respiratory</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Cough"> Cough</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Dyspnea"> Dyspnea (DOB)</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Hemoptysis"> Hemoptysis</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Cyanosis"> Cyanosis</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Cardiovascular -->
-                    <div class="ros-category" data-group="ros_cardio">
-                        <label class="text-blue-700 mb-2 block">Cardiovascular</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Chest Pain"> Chest Pain</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Palpitations"> Palpitations</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Orthopnea"> Orthopnea</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Abdomen (GI) -->
-                    <div class="ros-category lg:row-span-2" data-group="ros_gi">
-                        <label class="text-blue-700 mb-2 block">Abdomen (GI)</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Abdominal Cramps"> Abdominal Cramps</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Constipation"> Constipation</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Diarrhea"> Diarrhea</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Hematemesis"> Hematemesis</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Bloody Stools/Melena"> Bloody Stools/Melena</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Vomiting"> Vomiting</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Heart Burn"> Heart Burn</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Flatulence"> Flatulence</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Abdominal Distention"> Abdominal Distention</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Neurologic -->
-                    <div class="ros-category lg:row-span-2" data-group="ros_neuro">
-                        <label class="text-blue-700 mb-2 block">Neurologic</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Altered Mental Sensorium"> Altered Mental Sensorium</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Dizziness/Vertigo"> Dizziness/Vertigo</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Headache"> Headache</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Irritability"> Irritability</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Seizure"> Seizure</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Slurred Speech"> Slurred Speech</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Numbness"> Numbness/Loss of Sensation</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Paralysis"> Paralysis</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Tremors"> Tremors</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Endocrine -->
-                    <div class="ros-category" data-group="ros_endocrine">
-                        <label class="text-blue-700 mb-2 block">Endocrine</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Cold Sweats"> Cold Sweats</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Polyphagia/Polydipsia/Polyuria"> Polyphagia/Polydipsia/Polyuria</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Intolerance to heat and cold"> Intolerance to heat and cold</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Fatigue"> Fatigue</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Genitourinary -->
-                    <div class="ros-category" data-group="ros_gu">
-                        <label class="text-blue-700 mb-2 block">Genitourinary</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Dysuria"> Dysuria</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Frequency of urination"> Frequency of urination</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Hematuria"> Hematuria</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Urgency/Dribbling"> Urgency/Dribbling</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Integumentary -->
-                    <div class="ros-category lg:row-span-2" data-group="ros_integumentary">
-                        <label class="text-blue-700 mb-2 block">Integumentary</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Jaundice"> Jaundice</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Edema of lower extremities"> Edema of lower extremities</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Rash"> Rash</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Pallor"> Pallor</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Itchyness"> Itchyness</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Ulcerations"> Ulcerations</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Scaling"> Scaling</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Ecchymosis"> Ecchymosis</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Hematology/Lymphatics -->
-                    <div class="ros-category" data-group="ros_heme_lymph">
-                        <label class="text-blue-700 mb-2 block">Hematology/Lymphatics</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Hematoma/Ecchymosis"> Hematoma/Ecchymosis</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Lymphadenopathy"> Lymphadenopathy</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                    <!-- Psychosocial -->
-                    <div class="ros-category" data-group="ros_psych">
-                        <label class="text-blue-700 mb-2 block">Psychosocial</label>
-                        <div class="space-y-1">
-                            <label class="checkbox-group unremarkable-cb"><input type="checkbox" data-ros="Unremarkable" class="ros-master"> Unremarkable</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Depressed"> Depressed</label>
-                            <label class="checkbox-group"><input type="checkbox" data-ros="Excited"> Excited</label>
-                            <input type="text" class="ros-specific-other mt-2 w-full text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Others (Specify)...">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Medical & Family History -->
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="form-section mb-0">
-                    <div class="section-title">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Past Medical History (PMH)
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <label class="checkbox-group unremarkable-cb col-span-2"><input type="checkbox" data-pmh="Unremarkable" class="ros-master"> Unremarkable</label>
-                        <label class="checkbox-group"><input type="checkbox" data-pmh="Hypertension"> Hypertension</label>
-                        <label class="checkbox-group"><input type="checkbox" data-pmh="Diabetes"> Diabetes</label>
-                        <label class="checkbox-group"><input type="checkbox" data-pmh="Asthma"> Asthma</label>
-                        <label class="checkbox-group"><input type="checkbox" data-pmh="PTB"> PTB</label>
-                        <label class="checkbox-group"><input type="checkbox" data-pmh="COPD"> COPD</label>
-                        <label class="checkbox-group"><input type="checkbox" data-pmh="Heart Disease"> Heart Disease</label>
-                    </div>
-                    <input type="text" id="pmh_others" class="mt-4" placeholder="Others / Details...">
-                </div>
-
-                <div class="form-section mb-0">
-                    <div class="section-title">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                        Medication Maintenance
-                    </div>
-                    <label>Current Home Medications</label>
-                    <textarea id="med_maintenance" rows="4" placeholder="e.g. Amlodipine 5mg OD, Metformin 500mg BID..."></textarea>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <div class="section-title">Family Medical History (FMH)</div>
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
-                    <label class="checkbox-group unremarkable-cb col-span-full"><input type="checkbox" data-fmh="Unremarkable" class="ros-master"> Unremarkable</label>
-                    <label class="checkbox-group"><input type="checkbox" data-fmh="Hypertension"> Hypertension</label>
-                    <label class="checkbox-group"><input type="checkbox" data-fmh="Diabetes"> Diabetes</label>
-                    <label class="checkbox-group"><input type="checkbox" data-fmh="Asthma"> Asthma</label>
-                    <label class="checkbox-group"><input type="checkbox" data-fmh="Cancer"> Cancer</label>
-                    <label class="checkbox-group"><input type="checkbox" data-fmh="Stroke"> Stroke</label>
-                    <label class="checkbox-group"><input type="checkbox" data-fmh="Heart Disease"> Heart Disease</label>
-                </div>
-                <input type="text" id="fmh_others" class="mt-4" placeholder="Others / Specify...">
-            </div>
-
-            <!-- OB-GYNE -->
-            <div class="form-section">
-                <div class="section-title">OB-GYNE History</div>
-                <div class="grid-3">
-                    <div><label>Last Menstrual Period</label><input type="date" id="ob_lmp"></div>
-                    <div><label>OB Score G_P_ (TPAL)</label><input type="text" id="ob_score" placeholder="e.g. G2P1 (1001)"></div>
-                    <div class="flex items-end pb-1"><label class="checkbox-group"><input type="checkbox" id="ob_na"> Not Applicable (NA)</label></div>
-                </div>
-            </div>
-
-            <!-- Physical Exam -->
-            <div class="form-section">
-                <div class="section-title">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    Physical Examination (PE)
-                </div>
-                <!-- Updated Grid to accommodate O2 Saturation -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                    <div><label>Weight (kg)</label><input type="text" id="pe_weight"></div>
-                    <div><label>BP (mmHg)</label><input type="text" id="pe_bp"></div>
-                    <div><label>PR (bpm)</label><input type="text" id="pe_pr"></div>
-                    <div><label>RR (cpm)</label><input type="text" id="pe_rr"></div>
-                    <div><label>Temp (°C)</label><input type="text" id="pe_temp"></div>
-                    <div><label>O2 Sat (%)</label><input type="text" id="pe_o2"></div>
-                </div>
-
-                <div class="space-y-1">
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Skin/Extremity</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_skin"><option>Essentially Normal</option><option>Edema/Swelling</option><option>Cyanosis</option><option>Pallor</option><option>Jaundice</option><option>Clubbing</option><option>Others</option></select>
-                            <input type="text" id="pe_skin_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">HEENT</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_heent"><option>Essentially Normal</option><option>Pale Conjunctivae</option><option>Icteric Sclerae</option><option>Septal Deviation</option><option>Neck Mass</option><option>Others</option></select>
-                            <input type="text" id="pe_heent_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Chest/Respiratory</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_chest"><option>Essentially Normal</option><option>Rales/Crackles</option><option>Wheezes</option><option>Asymmetric Expansion</option><option>Others</option></select>
-                            <input type="text" id="pe_chest_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Cardiovascular</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_cvs"><option>Essentially Normal</option><option>Irregular Rhythm</option><option>Murmur</option><option>Heaves/Thrills</option><option>Others</option></select>
-                            <input type="text" id="pe_cvs_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Abdomen</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_abd"><option>Essentially Normal</option><option>Abnormal Tenderness</option><option>Palpable Mass</option><option>Rigidity</option><option>Hyperactive BS</option><option>Others</option></select>
-                            <input type="text" id="pe_abd_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Genitourinary</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_gu"><option>Essentially Normal</option><option>Blood on examining finger</option><option>Cervical dilation</option><option>Presence of abnormal vaginal/penile discharge</option><option>Lesions on external genitalia</option><option>Others</option></select>
-                            <input type="text" id="pe_gu_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 py-3 border-b border-slate-100 items-start">
-                        <span class="font-bold text-[10px] text-slate-400 uppercase tracking-widest pt-3">Neurologic</span>
-                        <div class="flex flex-col gap-2">
-                            <select id="pe_neuro"><option>Essentially Normal</option><option>Abnormal Reflexes</option><option>Abnormal Gait</option><option>Paralysis</option><option>Tremors</option><option>Others</option></select>
-                            <input type="text" id="pe_neuro_others" class="text-xs p-2 border border-slate-200 rounded bg-slate-50 focus:bg-white transition-colors" placeholder="Specify others...">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Admitting Diagnosis -->
-            <div class="form-section">
-                <div class="section-title">Admitting Diagnosis</div>
-                <textarea id="diagnosis" rows="3" placeholder="Enter clinical impression/final diagnosis..."></textarea>
-            </div>
-        </form>
-
-        <!-- Summary Section -->
-        <div class="form-section bg-blue-50/50 border-blue-200">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-lg">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-blue-900 text-lg uppercase tracking-tight">EMR Clinical Summary</h3>
-                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest">Ready to copy & paste</p>
-                    </div>
-                </div>
-                <button onclick="copyToClipboard()" id="copyBtn" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-xl active:scale-95 flex items-center gap-2 text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                    COPY ALL
-                </button>
-            </div>
-            <div id="summary-box">Awaiting clinical data entry...</div>
         </div>
 
-        <footer class="text-center text-[10px] text-slate-400 py-12 font-bold uppercase tracking-[0.2em]">
-            &copy; 2026 Taytay Doctors Multispecialty Hospital | Internal Quality Assurance Document
-        </footer>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                <h3 class="text-lg font-bold text-slate-800">History of Present Illness (HPI)</h3>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Onset</label><input type="text" id="hpi_onset" placeholder="e.g. 2 days ago" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Location</label><input type="text" id="hpi_location" placeholder="e.g. Lower right abdomen" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Severity</label><input type="text" id="hpi_severity" placeholder="e.g. 8/10, Mild/Severe" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Duration</label><input type="text" id="hpi_duration" placeholder="e.g. Intermittent for 4 hrs" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Medication Taken</label><input type="text" id="hpi_medication" placeholder="e.g. Paracetamol 500mg" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Consultation Done</label><input type="text" id="hpi_consultation" placeholder="e.g. Local clinic, none" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                </div>
+                <div class="flex flex-col mb-4"><label class="mb-1 text-sm font-semibold text-slate-600">Associated Signs and Symptoms</label><textarea id="hpi_symptoms" rows="2" placeholder="List any other associated symptoms..." class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>
+                <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Others (Custom HPI Narrative)</label><textarea id="hpi_others" rows="3" placeholder="Type custom HPI details here..." class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                <h3 class="text-lg font-bold text-slate-800">Past Medical, Family & Social History</h3>
+            </div>
+            <div class="p-6 space-y-6" id="history_container">
+                <!-- Dynamically populated via JS for Presets -->
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                <h3 class="text-lg font-bold text-slate-800">Physical Examination on Admission</h3>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">HR (bpm)</label><input type="text" id="vit_hr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">BP (mmHg)</label><input type="text" id="vit_bp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">RR (cpm)</label><input type="text" id="vit_rr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Temp (°C)</label><input type="text" id="vit_temp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                </div>
+                <div id="pe_container" class="space-y-6"></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                <h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
+            </div>
+            <div class="p-6">
+                <div id="ros_container" class="space-y-6"></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                <h3 class="text-lg font-bold text-slate-800">Physician Orders</h3>
+            </div>
+            <div class="p-6 space-y-6" id="orders_container">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6 border-t-4 border-t-blue-800 p-6">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex-1 w-full md:w-auto md:mr-8 mb-4 md:mb-0" id="rod_container">
+                    <!-- Dynamically populated via JS for ROD Presets -->
+                </div>
+                <button onclick="generateSummary()" class="w-full md:w-auto mt-4 bg-blue-600 text-white px-8 py-3 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-colors text-lg whitespace-nowrap">
+                    Generate Summary
+                </button>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function checkPassword() {
-            const pwdInput = document.getElementById('rod-password');
-            const errorMsg = document.getElementById('login-error');
-            
-            if (pwdInput.value === 'Reviewofsystem2026') {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-            } else {
-                errorMsg.classList.remove('hidden');
-                pwdInput.classList.add('border-red-500', 'ring-red-200');
-                pwdInput.value = '';
-                pwdInput.focus();
+    <div id="summaryModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden fade-in">
+            <div class="bg-blue-800 px-6 py-4 flex justify-between items-center text-white">
+                <h3 class="text-xl font-bold">Generated Summary</h3>
+                <button onclick="closeModal()" class="text-white hover:text-blue-200 text-3xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 flex-1 overflow-y-auto">
+                <pre id="summaryText" class="whitespace-pre-wrap font-mono text-sm bg-slate-50 p-4 rounded-lg border border-slate-200 text-slate-700"></pre>
+            </div>
+            <div class="p-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+                <span id="copyStatus" class="text-sm font-semibold text-green-600"></span>
+                <div class="space-x-3">
+                    <button onclick="closeModal()" class="px-4 py-2 border border-slate-300 rounded-lg font-semibold text-slate-600 hover:bg-slate-100">Close</button>
+                    <button onclick="copyToClipboard()" class="px-4 py-2 bg-blue-600 rounded-lg font-semibold text-white hover:bg-blue-700 shadow-sm">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification for Saving Presets -->
+    <div id="saveToast" class="fixed bottom-[-50px] left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-all z-50 pointer-events-none flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        <span class="font-medium text-sm">Preset saved & synced live!</span>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'clinical-summary-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        
+        let db, auth, userId, presetsRef;
+
+        // Initialize Firebase if config exists
+        if (Object.keys(firebaseConfig).length > 0) {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            initAuth();
+        } else {
+            console.warn("Firebase config missing. Presets will be saved in-memory only.");
+            window.renderAllPresets();
+        }
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                userId = auth.currentUser.uid;
+                
+                // Set path strictly conforming to the private data rule
+                presetsRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'orderPresets');
+                loadPresets();
+            } catch (error) {
+                console.error("Authentication Error:", error);
+                window.renderAllPresets();
             }
         }
 
-        // Allow pressing Enter to submit password
-        document.getElementById('rod-password').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+        function loadPresets() {
+            onSnapshot(presetsRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    // Merge cloud data with default keys in case cloud is missing new keys
+                    window.orderPresets = { ...window.orderPresets, ...docSnap.data() };
+                    window.renderAllPresets();
+                } else {
+                    // Save initial defaults to Firestore
+                    setDoc(presetsRef, window.orderPresets).catch(console.error);
+                    window.renderAllPresets();
+                }
+            }, (error) => {
+                console.error("Firestore Error:", error);
+            });
+        }
+
+        // Expose save function to window so standard onclick handlers can use it
+        window.savePresetToCloud = async function() {
+            if (presetsRef) {
+                try {
+                    await setDoc(presetsRef, window.orderPresets);
+                    showToast();
+                } catch (e) {
+                    console.error("Failed to save to cloud", e);
+                }
+            } else {
+                showToast(); // Show toast anyway for UX feedback
             }
-        });
+        };
 
-        const form = document.getElementById('medicalForm');
-        const summaryBox = document.getElementById('summary-box');
+        function showToast() {
+            const toast = document.getElementById('saveToast');
+            toast.classList.remove('toast-show');
+            // Trigger reflow
+            void toast.offsetWidth;
+            toast.classList.add('toast-show');
+            setTimeout(() => {
+                toast.classList.remove('toast-show');
+            }, 3000);
+        }
+    </script>
 
-        // logic to handle Unremarkable toggle
-        document.querySelectorAll('.ros-category, .form-section').forEach(container => {
-            const master = container.querySelector('.ros-master');
-            const others = Array.from(container.querySelectorAll('input[type="checkbox"]:not(.ros-master)'));
+    <script>
+        // Data Configuration
+        const PE_CATEGORIES = {
+            general: { label: 'General Survey', options: ['Awake and alert', 'Altered sensorium'] },
+            heent: { label: 'HEENT', options: ['Essentially normal', 'Abnormal pupillary reaction', 'Cervical lymphadenopathy', 'Dry mucous membrane', 'Icteric sclerae', 'Pale conjunctivae', 'Sunken eyeballs', 'Sunken fontanelle'] },
+            chest: { label: 'Chest/Lungs', options: ['Essentially normal', 'Lump/s over breast(s)', 'Asymmetrical chest expansion', 'Rales/crackles/rhonchi', 'Decreased breath sounds', 'Intercostal rib/clavicular retraction', 'Wheezes'] },
+            cvs: { label: 'CVS', options: ['Essentially normal', 'Irregular rhythm', 'Displaced apex beat', 'Muffled heart sounds', 'Heaves and/or thrills', 'Murmur', 'Pericardial bulge'] },
+            abdomen: { label: 'Abdomen', options: ['Essentially normal', 'Palpable mass(es)', 'Abdominal rigidity', 'Tympanitic/dull abdomen', 'Abdomen tenderness', 'Hyperactive bowel sounds'] },
+            gu: { label: 'GU (IE)', options: ['Essentially normal', 'Blood stained in exam finger', 'Uterine contraction', 'Cervical dilatation', 'Presence of abnormal discharge'] },
+            skin: { label: 'Skin/Extremities', options: ['Essentially normal', 'Clubbing', 'Cold clammy skin', 'Cyanosis/mottled skin', 'Edema/swelling', 'Decreased mobility', 'Pale nailbeds', 'Poor skin turgor', 'Rashes/petechiae', 'Weak pulses'] },
+            neuro: { label: 'Neuro-Exam', options: ['Essentially normal', 'Abnormal gait', 'Abnormal position sense', 'Abnormal/decreased sensation', 'Abnormal reflex(es)', 'Poor/altered memory', 'Poor muscle tone/strength', 'Poor coordination'] }
+        };
 
-            if (master) {
-                master.addEventListener('change', () => {
-                    if (master.checked) others.forEach(cb => cb.checked = false);
-                    updateSummary();
+        // Updated ROS based on requirements
+        const ROS_CATEGORIES = {
+            constitutional: { label: 'Constitutional', options: ['UNREMARKABLE', 'BODY MALAISE', 'ANOREXIA', 'FEVER', 'WEIGHT LOSS'] },
+            respiratory: { label: 'Respiratory', options: ['UNREMARKABLE', 'COUGH', 'DIFFICULTY OF BREATHING / DYSPNEA', 'HEMOPTYSIS', 'CYANOSIS'] },
+            hematology: { label: 'Hematology/Lymphatics', options: ['UNREMARKABLE', 'GUM BLEEDING', 'HEMATOMA/ECCHYMOSIS', 'LYMPHADENOPATHY'] },
+            heent: { 
+                label: 'HEENT', 
+                options: [
+                    'UNREMARKABLE', 'EPISTAXIS / NOSE BLEEDING', 'JAUNDICE', 'ICTERISIA', 'LOSS OF SMELL', 'REDNESS OF CONJUNCTIVAE', 
+                    'TINNITUS (LEFT)', 'TINNITUS (RIGHT)', 'BLURRING OF VISION (LEFT)', 'BLURRING OF VISION (RIGHT)', 
+                    'DEAFNESS (LEFT)', 'DEAFNESS (RIGHT)', 'EYE DISCHARGE (LEFT)', 'EYE DISCHARGE (RIGHT)', 
+                    'SORE THROAT', 'MASS ON THE NECK', 'DIFFICULTY SWALLOWING'
+                ] 
+            },
+            cardiovascular: { label: 'Cardiovascular', options: ['UNREMARKABLE', 'CHEST PAIN', 'ORTHOPNEA', 'EDEMA OF LOWER EXTREMITIES', 'PALPITATIONS'] },
+            integumentary: { label: 'Integumentary', options: ['UNREMARKABLE', 'PALLOR', 'ITCHINESS', 'ULCERATIONS', 'SCALING', 'ECCHYMOSIS', 'RASH'] },
+            genitourinary: { label: 'Genitourinary', options: ['DYSURIA', 'FREQUENCY OF URINATION', 'HEMATURIA', 'URGENCY/DRIBBLING'] },
+            psychosocial: { label: 'Psycho-Social', options: ['UNREMARKABLE', 'FLAT AFFECT', 'DEPRESSED', 'WITHDRAWN', 'EXCITED'] },
+            abdomen: { label: 'Abdomen', options: ['UNREMARKABLE', 'MELENA', 'ABDOMEN CRAMPS', 'VOMITING', 'CONSTIPATION', 'HEARTBURN', 'DIARRHEA', 'FLATULENCE', 'HEMATEMESIS', 'ABDOMINAL DISTENSION'] },
+            endocrine: { label: 'Endocrine', options: ['UNREMARKABLE', 'COLD SWEATS', 'POLYPHAGIA', 'POLYDIPSIA', 'POLYURIA', 'INTOLERANCE TO HEAT', 'INTOLERANCE TO COLD', 'FATIGUE'] },
+            neurologic: { label: 'Neurologic', options: ['UNREMARKABLE', 'SEIZURE', 'ALTERED MENTAL SENSORIUM', 'SLURRED SPEECH', 'DIZZINESS / VERTIGO', 'NUMBNESS / LOSS OF SENSATION', 'PARALYSIS', 'HEADACHE', 'IRRITABILITY', 'TREMORS'] }
+        };
+
+        // Configuration for the Preset UI Sections
+        const HISTORY_FIELDS_CONFIG = [
+            { key: 'pmh', label: 'Past Medical History (PMH)', placeholder: 'e.g. Hypertension, Type 2 Diabetes...', type: 'textarea' },
+            { key: 'home_meds', label: 'Home Medications', placeholder: 'e.g. Losartan 50mg OD, Metformin 500mg BID...', type: 'textarea' },
+            { key: 'fmh', label: 'Family Medical History (FMH)', placeholder: 'e.g. Asthma, Cancer...', type: 'textarea' },
+            { key: 'psh', label: 'Past Surgical History (PSH)', placeholder: 'e.g. Appendectomy 2010...', type: 'textarea' }
+        ];
+
+        const ORDER_FIELDS_CONFIG = [
+            { key: 'diet', label: 'Diet', placeholder: 'e.g. NPO, DAT', type: 'input' },
+            { key: 'ivf', label: 'IVF', placeholder: 'e.g. PNSS 1L @ 30gtts/min', type: 'input' },
+            { key: 'lab', label: 'Laboratory', placeholder: 'e.g. CBC, Urinalysis...', type: 'textarea' },
+            { key: 'diagnostics', label: 'Diagnostics', placeholder: 'e.g. Chest X-ray, ECG...', type: 'textarea' },
+            { key: 'medicines', label: 'Medicines', placeholder: 'e.g. Omeprazole 40mg IV OD...', type: 'textarea' }
+        ];
+
+        const ROD_FIELD_CONFIG = [
+            { key: 'rod', label: 'Resident on Duty (ROD)', placeholder: 'e.g. Dr. Juan Dela Cruz', type: 'input' }
+        ];
+
+        // Global State for Presets (expanded to include History and ROD)
+        window.orderPresets = {
+            diet: ['NPO', 'DAT', 'Clear Liquids', 'Soft Diet'],
+            ivf: ['PNSS 1L @ 30gtts/min', 'D5LR 1L @ 30gtts/min', 'Heplock'],
+            lab: ['CBC', 'Urinalysis', 'Fecalysis', 'Na, K, Cl', 'Creatinine'],
+            diagnostics: ['Chest X-ray (PA)', 'ECG 12-Lead', 'Whole Abdomen Ultrasound'],
+            medicines: ['Paracetamol 500mg tab', 'Omeprazole 40mg IV OD', 'Ceftriaxone 1g IV OD'],
+            pmh: ['Hypertension', 'Diabetes Mellitus Type 2', 'Bronchial Asthma', 'None'],
+            home_meds: ['Amlodipine 5mg tab OD', 'Losartan 50mg tab OD', 'None'],
+            fmh: ['Hypertension', 'Diabetes', 'Cancer', 'Asthma', 'None'],
+            psh: ['Appendectomy', 'Cesarean Section', 'None'],
+            rod: ['Dr. Juan Dela Cruz']
+        };
+
+        function renderCheckboxGroup(containerId, dataObj, prefix) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            let html = '';
+            for (const [key, cat] of Object.entries(dataObj)) {
+                html += `
+                <div class="mb-6 last:mb-0">
+                    <h4 class="text-md font-bold text-blue-800 mb-3 border-b border-slate-100 pb-2">${cat.label}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">`;
+                
+                cat.options.forEach((opt, idx) => {
+                    const id = `${prefix}_${key}_${idx}`;
+                    html += `
+                    <label class="flex items-start space-x-3 cursor-pointer group">
+                        <div class="flex items-center h-5">
+                            <input type="checkbox" name="${prefix}_${key}" value="${opt}" id="${id}" class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
+                        </div>
+                        <div class="text-sm text-slate-700 group-hover:text-slate-900 leading-tight pt-0.5">${opt}</div>
+                    </label>`;
                 });
-                others.forEach(cb => {
-                    cb.addEventListener('change', () => {
-                        if (cb.checked) master.checked = false;
-                        updateSummary();
+
+                html += `
+                    </div>
+                    <div class="flex items-center space-x-2 mt-2">
+                        <span class="text-sm font-semibold text-slate-600 whitespace-nowrap">Others:</span>
+                        <input type="text" id="${prefix}_${key}_others" placeholder="Specify other findings..." class="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800">
+                    </div>
+                </div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function renderPresetFields(containerId, fieldsConfig) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            let html = '';
+            fieldsConfig.forEach(field => {
+                const onKeyPressAttr = `onkeypress="if(event.key === 'Enter') { event.preventDefault(); addPreset('${field.key}'); }"`;
+                const inputHtml = field.type === 'input' 
+                    ? `<input type="text" id="field_${field.key}" ${onKeyPressAttr} placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
+                    : `<textarea id="field_${field.key}" rows="2" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-slate-800 transition-shadow"></textarea>`;
+                
+                html += `
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm ${fieldsConfig.length === 1 ? 'border-0 p-0 shadow-none bg-transparent' : ''}">
+                    <div class="flex flex-col md:flex-row gap-4 items-start">
+                        <div class="flex-1 w-full flex flex-col">
+                            <label class="mb-1 text-sm font-semibold text-slate-600">${field.label}</label>
+                            ${inputHtml}
+                        </div>
+                        <button onclick="addPreset('${field.key}')" class="mt-0 md:mt-6 w-full md:w-auto px-4 py-2 bg-white hover:bg-slate-100 text-blue-700 text-sm font-bold rounded-lg border border-blue-200 transition-colors shadow-sm whitespace-nowrap">
+                            + Save as Preset
+                        </button>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-200">
+                        <div class="flex flex-wrap items-center gap-2" id="preset_list_${field.key}">
+                            <!-- Presets go here -->
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        window.renderAllPresets = function() {
+            const allConfigs = [...HISTORY_FIELDS_CONFIG, ...ORDER_FIELDS_CONFIG, ...ROD_FIELD_CONFIG];
+            allConfigs.forEach(field => {
+                const container = document.getElementById(`preset_list_${field.key}`);
+                if (!container) return;
+                
+                // Initialize default array if missing from cloud data
+                if (!window.orderPresets[field.key]) {
+                    window.orderPresets[field.key] = [];
+                }
+                
+                const presets = window.orderPresets[field.key];
+                let html = `<span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Presets:</span>`;
+                
+                if (presets.length === 0) {
+                    html += `<span class="text-xs text-slate-400 italic">No presets saved yet.</span>`;
+                } else {
+                    presets.forEach(preset => {
+                        const safePreset = preset.replace(/'/g, "\\'");
+                        html += `
+                        <span onclick="appendToOrder('${field.key}', '${safePreset}', '${field.type}')" 
+                              class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full cursor-pointer hover:bg-blue-200 border border-blue-200 transition-colors shadow-sm"
+                              title="Click to add">
+                            ${preset}
+                        </span>`;
                     });
-                });
-            }
-        });
+                }
+                container.innerHTML = html;
+            });
+        };
 
-        function updateSummary() {
-            const hpiNarrative = document.getElementById('hpi_narrative').value;
-            const diagnosis = document.getElementById('diagnosis').value;
-            const maintenance = document.getElementById('med_maintenance').value;
+        window.addPreset = function(category) {
+            const inputEl = document.getElementById(`field_${category}`);
+            const val = inputEl.value.trim();
+            if (!val) return;
+
+            if (!window.orderPresets[category]) window.orderPresets[category] = [];
             
-            // Updated vitals payload to include O2 Saturation
-            const vitals = {
-                wt: document.getElementById('pe_weight').value,
-                bp: document.getElementById('pe_bp').value,
-                pr: document.getElementById('pe_pr').value,
-                rr: document.getElementById('pe_rr').value,
-                temp: document.getElementById('pe_temp').value,
-                o2: document.getElementById('pe_o2').value
-            };
+            if (!window.orderPresets[category].includes(val)) {
+                window.orderPresets[category].push(val);
+                window.renderAllPresets();
+                // Persist to Cloud if Firebase is active
+                if (typeof window.savePresetToCloud === 'function') {
+                    window.savePresetToCloud();
+                }
+            }
+        };
 
-            const rosGroups = [
-                { selector: '[data-group="ros_constitutional"]', label: 'CONSTITUTIONAL' },
-                { selector: '[data-group="ros_heent"]', label: 'HEENT' },
-                { selector: '[data-group="ros_respiratory"]', label: 'RESPIRATORY' },
-                { selector: '[data-group="ros_cardio"]', label: 'CARDIOVASCULAR' },
-                { selector: '[data-group="ros_gi"]', label: 'ABDOMEN (GI)' },
-                { selector: '[data-group="ros_neuro"]', label: 'NEUROLOGIC' },
-                { selector: '[data-group="ros_endocrine"]', label: 'ENDOCRINE' },
-                { selector: '[data-group="ros_gu"]', label: 'GENITOURINARY' },
-                { selector: '[data-group="ros_integumentary"]', label: 'INTEGUMENTARY' },
-                { selector: '[data-group="ros_heme_lymph"]', label: 'HEMATOLOGY/LYMPHATICS' },
-                { selector: '[data-group="ros_psych"]', label: 'PSYCHOSOCIAL' }
+        window.appendToOrder = function(category, text, type) {
+            const inputEl = document.getElementById(`field_${category}`);
+            const currentVal = inputEl.value.trim();
+            // Textareas separate by newline, inputs by comma (except for ROD where it usually replaces)
+            let separator = (type === 'textarea') ? '\n' : ', ';
+            if (category === 'rod') separator = ''; // Usually only 1 ROD
+            
+            if (currentVal && category !== 'rod') {
+                inputEl.value = currentVal + separator + text;
+            } else {
+                inputEl.value = text;
+            }
+        };
+
+        window.generateSummary = function() {
+            let summary = `DR. LOU VALMAR T. DATU - CLINICAL SUMMARY\n`;
+            summary += `==========================================================\n\n`;
+            
+            // Collect Demographics
+            summary += `PATIENT INFORMATION:\n`;
+            summary += `Name: ${document.getElementById('pat_name').value || 'N/A'}\n`;
+            summary += `Age/Sex: ${document.getElementById('pat_age').value || 'N/A'} / ${document.getElementById('pat_sex').value || 'N/A'}\n`;
+            summary += `Date: ${document.getElementById('pat_date').value || 'N/A'}\n\n`;
+
+            // Collect HPI
+            summary += `HISTORY OF PRESENT ILLNESS (HPI):\n`;
+            const hpiFields = [
+                { id: 'hpi_onset', label: 'Onset' }, { id: 'hpi_location', label: 'Location' },
+                { id: 'hpi_severity', label: 'Severity' }, { id: 'hpi_duration', label: 'Duration' },
+                { id: 'hpi_medication', label: 'Medication Taken' }, { id: 'hpi_consultation', label: 'Consultation Done' }
             ];
-
-            let summary = `[HISTORY OF PRESENT ILLNESS]\n`;
-            summary += hpiNarrative ? hpiNarrative.trim() : "Patient record initiated.";
-            summary += `\n\n`;
-
-            summary += `[REVIEW OF SYSTEMS]\n`;
-            rosGroups.forEach(group => {
-                const container = document.querySelector(group.selector);
-                if (container) {
-                    const master = container.querySelector('.ros-master');
-                    const selected = Array.from(container.querySelectorAll('input[type="checkbox"]:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-ros'));
-                    
-                    const otherInput = container.querySelector('.ros-specific-other');
-                    if (otherInput && otherInput.value.trim() !== '') {
-                        selected.push(`Others: ${otherInput.value.trim()}`);
-                    }
-
-                    const status = master.checked ? 'Unremarkable' : (selected.length ? `Significant Findings: ${selected.join(', ')}` : 'Not Assessed');
-                    summary += `${group.label}: ${status}\n`;
+            
+            let hasHpi = false;
+            hpiFields.forEach(f => {
+                const val = document.getElementById(f.id).value.trim();
+                if (val) {
+                    summary += `- ${f.label}: ${val}\n`;
+                    hasHpi = true;
                 }
             });
-            
+            const hpiSymptoms = document.getElementById('hpi_symptoms').value.trim();
+            if (hpiSymptoms) {
+                summary += `- Associated Signs & Symptoms: ${hpiSymptoms}\n`;
+                hasHpi = true;
+            }
+            const hpiOthers = document.getElementById('hpi_others').value.trim();
+            if (hpiOthers) {
+                summary += `Narrative / Others:\n${hpiOthers}\n`;
+                hasHpi = true;
+            }
+            if (!hasHpi) summary += `N/A\n`;
             summary += `\n`;
 
-            // PMH
-            const pmhMaster = document.querySelector('[data-pmh="Unremarkable"]');
-            const pmhChecked = Array.from(document.querySelectorAll('[data-pmh]:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-pmh'));
-            const pmhOther = document.getElementById('pmh_others').value;
-            if(pmhOther) pmhChecked.push(`Others: ${pmhOther}`);
-            summary += `[PAST MEDICAL HISTORY]\n${pmhMaster.checked ? 'Unremarkable' : (pmhChecked.length ? pmhChecked.join(', ') : 'Not Specified')}\n\n`;
+            // Collect New History Fields (PMH, Meds, FMH, PSH)
+            summary += `PAST MEDICAL, FAMILY & SOCIAL HISTORY:\n`;
+            HISTORY_FIELDS_CONFIG.forEach(field => {
+                summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
+            });
+            summary += `\n`;
 
-            summary += `[MEDICATION MAINTENANCE]\n${maintenance ? maintenance.trim() : 'None Reported'}\n\n`;
+            // Collect PE
+            summary += `PHYSICAL EXAMINATION ON ADMISSION:\n`;
+            summary += `- Vital Signs: HR: ${document.getElementById('vit_hr').value || '___'} | BP: ${document.getElementById('vit_bp').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'}\n`;
+            
+            let peHasEntries = false;
+            Object.keys(PE_CATEGORIES).forEach(key => {
+                const checkboxes = document.querySelectorAll(`input[name="pe_${key}"]:checked`);
+                const othersVal = document.getElementById(`pe_${key}_others`).value.trim();
+                
+                if (checkboxes.length > 0 || othersVal) {
+                    peHasEntries = true;
+                    let findings = Array.from(checkboxes).map(cb => cb.value);
+                    if (othersVal) findings.push(`Others: ${othersVal}`);
+                    summary += `- ${PE_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+                } else {
+                    summary += `- ${PE_CATEGORIES[key].label}: Essentially normal\n`;
+                    peHasEntries = true;
+                }
+            });
+            if (!peHasEntries) summary += `- No significant findings noted.\n`;
+            summary += `\n`;
 
-            // FMH
-            const fmhMaster = document.querySelector('[data-fmh="Unremarkable"]');
-            const fmhChecked = Array.from(document.querySelectorAll('[data-fmh]:checked:not(.ros-master)')).map(cb => cb.getAttribute('data-fmh'));
-            const fmhOther = document.getElementById('fmh_others').value;
-            if(fmhOther) fmhChecked.push(`Others: ${fmhOther}`);
-            summary += `[FAMILY MEDICAL HISTORY]\n${fmhMaster.checked ? 'Unremarkable' : (fmhChecked.length ? fmhChecked.join(', ') : 'Not Specified')}\n\n`;
+            // Collect ROS
+            summary += `REVIEW OF SYSTEMS:\n`;
+            let rosHasEntries = false;
+            Object.keys(ROS_CATEGORIES).forEach(key => {
+                const checkboxes = document.querySelectorAll(`input[name="ros_${key}"]:checked`);
+                const othersVal = document.getElementById(`ros_${key}_others`).value.trim();
+                
+                if (checkboxes.length > 0 || othersVal) {
+                    rosHasEntries = true;
+                    let findings = Array.from(checkboxes).map(cb => cb.value);
+                    if (othersVal) findings.push(`Others: ${othersVal}`);
+                    summary += `- ${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+                } else {
+                    summary += `- ${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
+                    rosHasEntries = true;
+                }
+            });
+            if (!rosHasEntries) summary += `- No significant findings noted.\n`;
+            summary += `\n`;
 
-            const obNa = document.getElementById('ob_na').checked;
-            if (!obNa) {
-                const lmp = document.getElementById('ob_lmp').value;
-                const score = document.getElementById('ob_score').value;
-                if(lmp || score) summary += `[OB HISTORY]\nLMP: ${lmp || '--'} | OB Score: ${score || '--'}\n\n`;
+            // Collect Orders
+            summary += `PHYSICIAN ORDERS:\n`;
+            ORDER_FIELDS_CONFIG.forEach(field => {
+                summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
+            });
+            summary += `\n`;
+
+            // Collect ROD
+            summary += `==========================================================\n`;
+            summary += `ROD (Resident on Duty): ${document.getElementById('field_rod').value.trim() || 'N/A'}\n`;
+
+            // Show Modal
+            document.getElementById('summaryText').innerText = summary;
+            document.getElementById('copyStatus').innerText = '';
+            const modal = document.getElementById('summaryModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeModal = function() {
+            const modal = document.getElementById('summaryModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.copyToClipboard = function() {
+            const text = document.getElementById('summaryText').innerText;
+            const statusEl = document.getElementById('copyStatus');
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(() => statusEl.innerText = 'Copied to clipboard!')
+                    .catch(() => fallbackCopy(text, statusEl));
             } else {
-                summary += `[OB HISTORY]\nNot Applicable\n\n`;
+                fallbackCopy(text, statusEl);
             }
+        };
 
-            const getPE = (selectId, otherId) => {
-                const val = document.getElementById(selectId).value;
-                const other = document.getElementById(otherId) ? document.getElementById(otherId).value.trim() : '';
-                if (val === 'Others' && other) return other;
-                if (other) return `${val} (Others: ${other})`;
-                return val;
-            };
-
-            // Updated summary string to output SpO2 field and PE Others
-            summary += `[PHYSICAL EXAMINATION]\n`;
-            summary += `VITALS: BP ${vitals.bp || '--'} | PR ${vitals.pr || '--'} | RR ${vitals.rr || '--'} | T ${vitals.temp || '--'} | SpO2 ${vitals.o2 || '--'}% | WT ${vitals.wt || '--'}kg\n`;
-            summary += `SKIN/EXT: ${getPE('pe_skin', 'pe_skin_others')}\n`;
-            summary += `HEENT: ${getPE('pe_heent', 'pe_heent_others')}\n`;
-            summary += `CHEST/RESP: ${getPE('pe_chest', 'pe_chest_others')}\n`;
-            summary += `CARDIOVASCULAR: ${getPE('pe_cvs', 'pe_cvs_others')}\n`;
-            summary += `ABDOMEN: ${getPE('pe_abd', 'pe_abd_others')}\n`;
-            summary += `GENITOURINARY: ${getPE('pe_gu', 'pe_gu_others')}\n`;
-            summary += `NEUROLOGIC: ${getPE('pe_neuro', 'pe_neuro_others')}\n\n`;
-
-            summary += `[ADMITTING DIAGNOSIS]\n`;
-            summary += diagnosis ? diagnosis.trim() : "Awaiting Final Confirmation.";
-
-            summaryBox.innerText = summary;
-        }
-
-        form.addEventListener('input', updateSummary);
-
-        function copyToClipboard() {
-            const text = summaryBox.innerText;
+        function fallbackCopy(text, statusEl) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
             document.body.appendChild(textArea);
             textArea.select();
             try {
                 document.execCommand('copy');
-                const btn = document.getElementById('copyBtn');
-                btn.innerText = "COPIED TO CLIPBOARD!";
-                btn.classList.replace('bg-blue-600', 'bg-green-600');
-                setTimeout(() => {
-                    btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg> COPY ALL`;
-                    btn.classList.replace('bg-green-600', 'bg-blue-600');
-                }, 2000);
+                statusEl.innerText = 'Copied to clipboard!';
             } catch (err) {
-                console.error('Failed to copy', err);
+                statusEl.innerText = 'Failed to copy. Please select manually.';
+                statusEl.classList.replace('text-green-600', 'text-red-500');
             }
             document.body.removeChild(textArea);
         }
 
-        // Initialize empty summary
-        updateSummary();
+        // Initialize UI
+        renderCheckboxGroup('pe_container', PE_CATEGORIES, 'pe');
+        renderCheckboxGroup('ros_container', ROS_CATEGORIES, 'ros');
+        renderPresetFields('history_container', HISTORY_FIELDS_CONFIG);
+        renderPresetFields('orders_container', ORDER_FIELDS_CONFIG);
+        renderPresetFields('rod_container', ROD_FIELD_CONFIG);
+        
+        // Initial render of presets (will be overwritten when Firebase loads if available)
+        renderAllPresets();
     </script>
 </body>
 </html>
