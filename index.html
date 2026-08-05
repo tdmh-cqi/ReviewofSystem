@@ -32,16 +32,6 @@ animation: slideUp 0.3s ease-out forwards;
 <div>
 <h1 class="text-2xl md:text-3xl font-bold">Dr. Lou Valmar T. Datu</h1>
 <h2 class="text-blue-200 mt-1">Clinical Summary System</h2>
-<!-- Export / Import Buttons -->
-<div class="mt-3 flex items-center space-x-3 text-sm font-medium">
-<button onclick="exportPresets()" class="bg-blue-900/50 hover:bg-blue-900 px-3 py-1 rounded border border-blue-700 transition-colors">
-↓ Export Presets
-</button>
-<label class="bg-blue-900/50 hover:bg-blue-900 px-3 py-1 rounded border border-blue-700 transition-colors cursor-pointer">
-↑ Import Presets
-<input type="file" id="importFile" accept=".json" class="hidden" onchange="importPresets(event)">
-</label>
-</div>
 </div>
 <button onclick="generateSummary()" class="mt-4 md:mt-0 bg-white text-blue-800 px-6 py-3 rounded-lg font-bold shadow hover:bg-blue-50 transition-colors">
 Generate Summary
@@ -108,18 +98,13 @@ Generate Summary
 
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
 <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-<h3 class="text-lg font-bold text-slate-800">General Survey</h3>
-</div>
-<div class="p-6">
-<div id="gs_container" class="space-y-6"></div>
-</div>
-</div>
-
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
 <h3 class="text-lg font-bold text-slate-800">Physical Examination on Admission</h3>
 </div>
 <div class="p-6">
+<!-- 1. General Survey Container -->
+<div id="gs_container" class="space-y-6 mb-8 border-b border-slate-200 pb-6"></div>
+
+<!-- 2. Vital Signs -->
 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8 bg-blue-50 p-4 rounded-lg border border-blue-100">
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">BP (mmHg)</label><input type="text" id="vit_bp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">HR (bpm)</label><input type="text" id="vit_hr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
@@ -129,6 +114,8 @@ Generate Summary
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Height (cm)</label><input type="text" id="vit_ht" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Weight (kg)</label><input type="text" id="vit_wt" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 </div>
+
+<!-- 3-9. HEENT to Neuro -->
 <div id="pe_container" class="space-y-6"></div>
 </div>
 </div>
@@ -165,13 +152,6 @@ Generate Summary
 </div>
 </div>
 
-<!-- Toast Notification -->
-<div id="saveToast" class="fixed bottom-[-50px] left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-all z-50 pointer-events-none flex items-center gap-2">
-<span id="toastIcon" class="text-green-400">
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-<span class="font-medium text-sm">Preset saved to your browser!</span>
-</div>
-
 <script>
 // Data Configuration
 const GS_CATEGORIES = {
@@ -188,11 +168,9 @@ skin: { label: 'Skin/Extremities', options: ['Essentially normal', 'Clubbing', '
 neuro: { label: 'Neuro-Exam', options: ['Essentially normal', 'Abnormal gait', 'Abnormal position sense', 'Abnormal/decreased sensation', 'Abnormal reflex(es)', 'Poor/altered memory', 'Poor muscle tone/strength', 'Poor coordination'] }
 };
 
-// Updated ROS based on requirements
+// Updated ROS reordered based on requirements
 const ROS_CATEGORIES = {
 constitutional: { label: 'Constitutional', options: ['UNREMARKABLE', 'BODY MALAISE', 'ANOREXIA', 'FEVER', 'WEIGHT LOSS'] },
-respiratory: { label: 'Respiratory', options: ['UNREMARKABLE', 'COUGH', 'DIFFICULTY OF BREATHING / DYSPNEA', 'HEMOPTYSIS', 'CYANOSIS'] },
-hematology: { label: 'Hematology/Lymphatics', options: ['UNREMARKABLE', 'GUM BLEEDING', 'HEMATOMA/ECCHYMOSIS', 'LYMPHADENOPATHY'] },
 heent: {
 label: 'HEENT',
 options: [
@@ -202,16 +180,18 @@ options: [
 'SORE THROAT', 'MASS ON THE NECK', 'DIFFICULTY SWALLOWING'
 ]
 },
+respiratory: { label: 'Respiratory', options: ['UNREMARKABLE', 'COUGH', 'DIFFICULTY OF BREATHING / DYSPNEA', 'HEMOPTYSIS', 'CYANOSIS'] },
 cardiovascular: { label: 'Cardiovascular', options: ['UNREMARKABLE', 'CHEST PAIN', 'ORTHOPNEA', 'EDEMA OF LOWER EXTREMITIES', 'PALPITATIONS'] },
-integumentary: { label: 'Integumentary', options: ['UNREMARKABLE', 'PALLOR', 'ITCHINESS', 'ULCERATIONS', 'SCALING', 'ECCHYMOSIS', 'RASH'] },
-genitourinary: { label: 'Genitourinary', options: ['DYSURIA', 'FREQUENCY OF URINATION', 'HEMATURIA', 'URGENCY/DRIBBLING'] },
-psychosocial: { label: 'Psycho-Social', options: ['UNREMARKABLE', 'FLAT AFFECT', 'DEPRESSED', 'WITHDRAWN', 'EXCITED'] },
 abdomen: { label: 'Abdomen', options: ['UNREMARKABLE', 'MELENA', 'ABDOMEN CRAMPS', 'VOMITING', 'CONSTIPATION', 'HEARTBURN', 'DIARRHEA', 'FLATULENCE', 'HEMATEMESIS', 'ABDOMINAL DISTENSION'] },
+genitourinary: { label: 'Genitourinary', options: ['UNREMARKABLE', 'DYSURIA', 'FREQUENCY OF URINATION', 'HEMATURIA', 'URGENCY/DRIBBLING'] },
 endocrine: { label: 'Endocrine', options: ['UNREMARKABLE', 'COLD SWEATS', 'POLYPHAGIA', 'POLYDIPSIA', 'POLYURIA', 'INTOLERANCE TO HEAT', 'INTOLERANCE TO COLD', 'FATIGUE'] },
+hematology: { label: 'Hematology/Lymphatics', options: ['UNREMARKABLE', 'GUM BLEEDING', 'HEMATOMA/ECCHYMOSIS', 'LYMPHADENOPATHY'] },
+integumentary: { label: 'Integumentary', options: ['UNREMARKABLE', 'PALLOR', 'ITCHINESS', 'ULCERATIONS', 'SCALING', 'ECCHYMOSIS', 'RASH'] },
+psychosocial: { label: 'Psycho-Social', options: ['UNREMARKABLE', 'FLAT AFFECT', 'DEPRESSED', 'WITHDRAWN', 'EXCITED'] },
 neurologic: { label: 'Neurologic', options: ['UNREMARKABLE', 'SEIZURE', 'ALTERED MENTAL SENSORIUM', 'SLURRED SPEECH', 'DIZZINESS / VERTIGO', 'NUMBNESS / LOSS OF SENSATION', 'PARALYSIS', 'HEADACHE', 'IRRITABILITY', 'TREMORS'] }
 };
 
-// Configuration for the Preset UI Sections
+// Configuration for Form Fields
 const HISTORY_FIELDS_CONFIG = [
 { key: 'pmh', label: 'Past Medical History (PMH)', placeholder: 'e.g. Hypertension, Type 2 Diabetes...', type: 'textarea' },
 { key: 'home_meds', label: 'Medications', placeholder: 'e.g. Losartan 50mg OD, Metformin 500mg BID...', type: 'textarea' },
@@ -222,94 +202,6 @@ const HISTORY_FIELDS_CONFIG = [
 const ROD_FIELD_CONFIG = [
 { key: 'rod', label: 'Resident on Duty (ROD)', placeholder: 'e.g. Dr. Juan Dela Cruz', type: 'input' }
 ];
-
-// Global State for Presets (Orders Removed)
-window.orderPresets = {
-pmh: ['Hypertension', 'Diabetes Mellitus Type 2', 'Bronchial Asthma', 'None'],
-home_meds: ['Amlodipine 5mg tab OD', 'Losartan 50mg tab OD', 'None'],
-fmh: ['Hypertension', 'Diabetes', 'Cancer', 'Asthma', 'None'],
-psh: ['Appendectomy', 'Cesarean Section', 'None'],
-rod: ['Dr. Juan Dela Cruz']
-};
-
-// --- LOCAL STORAGE LOGIC ---
-function loadPresets() {
-const savedData = localStorage.getItem('clinical_summary_presets');
-if (savedData) {
-try {
-const parsedData = JSON.parse(savedData);
-// Merge saved presets with default keys
-window.orderPresets = { ...window.orderPresets, ...parsedData };
-} catch (e) {
-console.error("Error loading presets from Local Storage", e);
-}
-}
-window.renderAllPresets();
-}
-
-window.savePresetToCloud = function() {
-try {
-// Save directly to the browser's local storage
-localStorage.setItem('clinical_summary_presets', JSON.stringify(window.orderPresets));
-showToast("Preset saved to your browser!");
-} catch (e) {
-console.error("Failed to save to Local Storage", e);
-}
-};
-
-// --- EXPORT / IMPORT LOGIC ---
-window.exportPresets = function() {
-const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.orderPresets));
-const downloadAnchorNode = document.createElement('a');
-downloadAnchorNode.setAttribute("href", dataStr);
-downloadAnchorNode.setAttribute("download", "clinical_presets.json");
-document.body.appendChild(downloadAnchorNode);
-downloadAnchorNode.click();
-downloadAnchorNode.remove();
-};
-
-window.importPresets = function(event) {
-const file = event.target.files[0];
-if (!file) return;
-const reader = new FileReader();
-reader.onload = function(e) {
-try {
-const importedData = JSON.parse(e.target.result);
-window.orderPresets = { ...window.orderPresets, ...importedData };
-localStorage.setItem('clinical_summary_presets', JSON.stringify(window.orderPresets));
-window.renderAllPresets();
-showToast("Presets imported successfully!");
-} catch (err) {
-showToast("Invalid file format. Please upload a valid JSON file.", true);
-}
-};
-reader.readAsText(file);
-event.target.value = ''; // Reset input
-};
-
-function showToast(message, isError = false) {
-const toast = document.getElementById('saveToast');
-const msgEl = document.getElementById('toastMessage');
-const iconEl = document.getElementById('toastIcon');
-
-msgEl.innerText = message;
-if (isError) {
-iconEl.classList.replace('text-green-400', 'text-red-400');
-iconEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
-} else {
-iconEl.classList.replace('text-red-400', 'text-green-400');
-iconEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
-}
-
-toast.classList.remove('toast-show');
-// Trigger reflow
-void toast.offsetWidth;
-toast.classList.add('toast-show');
-setTimeout(() => {
-toast.classList.remove('toast-show');
-}, 3000);
-}
-// ---------------------------
 
 function renderCheckboxGroup(containerId, dataObj, prefix) {
 const container = document.getElementById(containerId);
@@ -342,92 +234,24 @@ html += `
 container.innerHTML = html;
 }
 
-function renderPresetFields(containerId, fieldsConfig) {
+function renderFormFields(containerId, fieldsConfig) {
 const container = document.getElementById(containerId);
 if (!container) return;
 let html = '';
 fieldsConfig.forEach(field => {
-const onKeyPressAttr = `onkeypress="if(event.key === 'Enter') { event.preventDefault(); addPreset('${field.key}'); }"`;
 const inputHtml = field.type === 'input'
-? `<input type="text" id="field_${field.key}" ${onKeyPressAttr} placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
+? `<input type="text" id="field_${field.key}" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
 : `<textarea id="field_${field.key}" rows="2" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-slate-800 transition-shadow"></textarea>`;
 html += `
 <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm ${fieldsConfig.length === 1 ? 'border-0 p-0 shadow-none bg-transparent' : ''}">
-<div class="flex flex-col md:flex-row gap-4 items-start">
-<div class="flex-1 w-full flex flex-col">
+<div class="flex flex-col w-full">
 <label class="mb-1 text-sm font-semibold text-slate-600">${field.label}</label>
 ${inputHtml}
-</div>
-<button onclick="addPreset('${field.key}')" class="mt-0 md:mt-6 w-full md:w-auto px-4 py-2 bg-white hover:bg-slate-100 text-blue-700 text-sm font-bold rounded-lg border border-blue-200 transition-colors shadow-sm whitespace-nowrap">
-+ Save as Preset
-</button>
-</div>
-<div class="mt-4 pt-3 border-t border-slate-200">
-<div class="flex flex-wrap items-center gap-2" id="preset_list_${field.key}">
-<!-- Presets go here -->
-</div>
 </div>
 </div>`;
 });
 container.innerHTML = html;
 }
-
-window.renderAllPresets = function() {
-const allConfigs = [...HISTORY_FIELDS_CONFIG, ...ROD_FIELD_CONFIG];
-allConfigs.forEach(field => {
-const container = document.getElementById(`preset_list_${field.key}`);
-if (!container) return;
-// Initialize default array if missing from cloud data
-if (!window.orderPresets[field.key]) {
-window.orderPresets[field.key] = [];
-}
-const presets = window.orderPresets[field.key];
-let html = `<span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Presets:</span>`;
-if (presets.length === 0) {
-html += `<span class="text-xs text-slate-400 italic">No presets saved yet.</span>`;
-} else {
-presets.forEach(preset => {
-const safePreset = preset.replace(/'/g, "\\'");
-html += `
-<span onclick="appendToOrder('${field.key}', '${safePreset}', '${field.type}')"
-class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full cursor-pointer hover:bg-blue-200 border border-blue-200 transition-colors shadow-sm"
-title="Click to add">
-${preset}
-</span>`;
-});
-}
-container.innerHTML = html;
-});
-};
-
-window.addPreset = function(category) {
-const inputEl = document.getElementById(`field_${category}`);
-const val = inputEl.value.trim();
-if (!val) return;
-
-if (!window.orderPresets[category]) window.orderPresets[category] = [];
-if (!window.orderPresets[category].includes(val)) {
-window.orderPresets[category].push(val);
-window.renderAllPresets();
-// Persist to Cloud if Firebase is active
-if (typeof window.savePresetToCloud === 'function') {
-window.savePresetToCloud();
-}
-}
-};
-
-window.appendToOrder = function(category, text, type) {
-const inputEl = document.getElementById(`field_${category}`);
-const currentVal = inputEl.value.trim();
-// Textareas separate by newline, inputs by comma (except for ROD where it usually replaces)
-let separator = (type === 'textarea') ? '\n' : ', ';
-if (category === 'rod') separator = ''; // Usually only 1 ROD
-if (currentVal && category !== 'rod') {
-inputEl.value = currentVal + separator + text;
-} else {
-inputEl.value = text;
-}
-};
 
 window.generateSummary = function() {
 let summary = `DR. LOU VALMAR T. DATU - CLINICAL SUMMARY\n`;
@@ -438,7 +262,7 @@ summary += `Name: ${document.getElementById('pat_name').value || 'N/A'}\n`;
 summary += `Age/Sex: ${document.getElementById('pat_age').value || 'N/A'} / ${document.getElementById('pat_sex').value || 'N/A'}\n`;
 summary += `Date: ${document.getElementById('pat_date').value || 'N/A'}\n\n`;
 
-// Collect HPI (Simplified to just narrative)
+// Collect HPI
 summary += `HISTORY OF PRESENT ILLNESS (HPI):\n`;
 const hpiNarrative = document.getElementById('hpi_narrative').value.trim();
 if (hpiNarrative) {
@@ -451,7 +275,7 @@ summary += `\n`;
 // Collect New History Fields (PMH, Meds, FMH, PSH)
 summary += `PAST MEDICAL, FAMILY & SOCIAL HISTORY:\n`;
 HISTORY_FIELDS_CONFIG.forEach(field => {
-summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
+summary += `${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
 });
 summary += `\n`;
 
@@ -465,34 +289,40 @@ if (checkboxes.length > 0 || othersVal) {
 rosHasEntries = true;
 let findings = Array.from(checkboxes).map(cb => cb.value);
 if (othersVal) findings.push(`Others: ${othersVal}`);
-summary += `- ${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+summary += `${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
 } else {
-summary += `- ${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
+summary += `${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
 rosHasEntries = true;
 }
 });
-if (!rosHasEntries) summary += `- No significant findings noted.\n`;
+if (!rosHasEntries) summary += `No significant findings noted.\n`;
 summary += `\n`;
 
-// Collect General Survey
-summary += `GENERAL SURVEY:\n`;
+// Collect PE
+summary += `PHYSICAL EXAMINATION ON ADMISSION:\n`;
+
+// 1. General Survey Findings
+let gsFindings = [];
 let gsHasEntries = false;
 Object.keys(GS_CATEGORIES).forEach(key => {
 const checkboxes = document.querySelectorAll(`input[name="gs_${key}"]:checked`);
 const othersVal = document.getElementById(`gs_${key}_others`).value.trim();
 if (checkboxes.length > 0 || othersVal) {
 gsHasEntries = true;
-let findings = Array.from(checkboxes).map(cb => cb.value);
-if (othersVal) findings.push(`Others: ${othersVal}`);
-summary += `- ${findings.join(', ')}\n`;
+gsFindings = Array.from(checkboxes).map(cb => cb.value);
+if (othersVal) gsFindings.push(`Others: ${othersVal}`);
 }
 });
-if (!gsHasEntries) summary += `- Awake and alert\n`;
-summary += `\n`;
+if (gsHasEntries) {
+summary += `General Survey: ${gsFindings.join(', ')}\n`;
+} else {
+summary += `General Survey: Awake and alert\n`;
+}
 
-// Collect PE
-summary += `PHYSICAL EXAMINATION ON ADMISSION:\n`;
-summary += `- Vital Signs: BP: ${document.getElementById('vit_bp').value || '___'} | HR: ${document.getElementById('vit_hr').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'} | O2 Sat: ${document.getElementById('vit_o2').value || '___'} | Height: ${document.getElementById('vit_ht').value || '___'} | Weight: ${document.getElementById('vit_wt').value || '___'}\n`;
+// 2. Vital Signs
+summary += `Vital Signs: BP: ${document.getElementById('vit_bp').value || '___'} | HR: ${document.getElementById('vit_hr').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'} | O2 Sat: ${document.getElementById('vit_o2').value || '___'} | Height: ${document.getElementById('vit_ht').value || '___'} | Weight: ${document.getElementById('vit_wt').value || '___'}\n`;
+
+// 3-9. HEENT to Neuro
 let peHasEntries = false;
 Object.keys(PE_CATEGORIES).forEach(key => {
 const checkboxes = document.querySelectorAll(`input[name="pe_${key}"]:checked`);
@@ -501,13 +331,13 @@ if (checkboxes.length > 0 || othersVal) {
 peHasEntries = true;
 let findings = Array.from(checkboxes).map(cb => cb.value);
 if (othersVal) findings.push(`Others: ${othersVal}`);
-summary += `- ${PE_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+summary += `${PE_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
 } else {
-summary += `- ${PE_CATEGORIES[key].label}: Essentially normal\n`;
+summary += `${PE_CATEGORIES[key].label}: Essentially normal\n`;
 peHasEntries = true;
 }
 });
-if (!peHasEntries) summary += `- No significant findings noted.\n`;
+if (!peHasEntries && !gsHasEntries) summary += `No significant findings noted.\n`;
 summary += `\n`;
 
 // Collect ROD
@@ -561,10 +391,8 @@ document.body.removeChild(textArea);
 renderCheckboxGroup('gs_container', GS_CATEGORIES, 'gs');
 renderCheckboxGroup('pe_container', PE_CATEGORIES, 'pe');
 renderCheckboxGroup('ros_container', ROS_CATEGORIES, 'ros');
-renderPresetFields('history_container', HISTORY_FIELDS_CONFIG);
-renderPresetFields('rod_container', ROD_FIELD_CONFIG);
-// Load presets from Local Storage and render
-loadPresets();
+renderFormFields('history_container', HISTORY_FIELDS_CONFIG);
+renderFormFields('rod_container', ROD_FIELD_CONFIG);
 </script>
 </body>
 </html>
