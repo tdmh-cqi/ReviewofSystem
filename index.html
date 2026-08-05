@@ -99,19 +99,19 @@ Generate Summary
 
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
 <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-<h3 class="text-lg font-bold text-slate-800">General Survey</h3>
+<h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
 </div>
 <div class="p-6">
-<div id="gs_container" class="space-y-6"></div>
+<div id="ros_container" class="space-y-6"></div>
 </div>
 </div>
 
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
 <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-<h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
+<h3 class="text-lg font-bold text-slate-800">General Survey</h3>
 </div>
 <div class="p-6">
-<div id="ros_container" class="space-y-6"></div>
+<div id="gs_container" class="space-y-6"></div>
 </div>
 </div>
 
@@ -455,22 +455,6 @@ summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).va
 });
 summary += `\n`;
 
-// Collect General Survey
-summary += `GENERAL SURVEY:\n`;
-let gsHasEntries = false;
-Object.keys(GS_CATEGORIES).forEach(key => {
-const checkboxes = document.querySelectorAll(`input[name="gs_${key}"]:checked`);
-const othersVal = document.getElementById(`gs_${key}_others`).value.trim();
-if (checkboxes.length > 0 || othersVal) {
-gsHasEntries = true;
-let findings = Array.from(checkboxes).map(cb => cb.value);
-if (othersVal) findings.push(`Others: ${othersVal}`);
-summary += `- ${findings.join(', ')}\n`;
-}
-});
-if (!gsHasEntries) summary += `- Awake and alert\n`;
-summary += `\n`;
-
 // Collect ROS
 summary += `REVIEW OF SYSTEMS:\n`;
 let rosHasEntries = false;
@@ -488,6 +472,22 @@ rosHasEntries = true;
 }
 });
 if (!rosHasEntries) summary += `- No significant findings noted.\n`;
+summary += `\n`;
+
+// Collect General Survey
+summary += `GENERAL SURVEY:\n`;
+let gsHasEntries = false;
+Object.keys(GS_CATEGORIES).forEach(key => {
+const checkboxes = document.querySelectorAll(`input[name="gs_${key}"]:checked`);
+const othersVal = document.getElementById(`gs_${key}_others`).value.trim();
+if (checkboxes.length > 0 || othersVal) {
+gsHasEntries = true;
+let findings = Array.from(checkboxes).map(cb => cb.value);
+if (othersVal) findings.push(`Others: ${othersVal}`);
+summary += `- ${findings.join(', ')}\n`;
+}
+});
+if (!gsHasEntries) summary += `- Awake and alert\n`;
 summary += `\n`;
 
 // Collect PE
