@@ -1,607 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Lou Valmar T. Datu - Clinical Summary</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        
-        /* Smooth scrolling and transitions */
-        html { scroll-behavior: smooth; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Toast Notification Animation */
-        @keyframes slideUp {
-            from { bottom: -50px; opacity: 0; }
-            to { bottom: 20px; opacity: 1; }
-        }
-        .toast-show {
-            animation: slideUp 0.3s ease-out forwards;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Lou Valmar T. Datu - Clinical Summary</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+body { font-family: 'Inter', sans-serif; }
+/* Smooth scrolling and transitions */
+html { scroll-behavior: smooth; }
+.fade-in { animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+/* Toast Notification Animation */
+@keyframes slideUp {
+from { bottom: -50px; opacity: 0; }
+to { bottom: 20px; opacity: 1; }
+}
+.toast-show {
+animation: slideUp 0.3s ease-out forwards;
+}
+</style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen p-4 md:p-8">
 
-    <div class="max-w-5xl mx-auto space-y-6">
-        
-        <header class="bg-blue-800 text-white rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold">Dr. Lou Valmar T. Datu</h1>
-                <h2 class="text-blue-200 mt-1">Clinical Summary System</h2>
-                
-                <!-- Export / Import Buttons added here -->
-                <div class="mt-3 flex items-center space-x-3 text-sm font-medium">
-                    <button onclick="exportPresets()" class="bg-blue-900/50 hover:bg-blue-900 px-3 py-1 rounded border border-blue-700 transition-colors">
-                        ↓ Export Presets
-                    </button>
-                    <label class="bg-blue-900/50 hover:bg-blue-900 px-3 py-1 rounded border border-blue-700 transition-colors cursor-pointer">
-                        ↑ Import Presets
-                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importPresets(event)">
-                    </label>
-                </div>
+<div class="max-w-5xl mx-auto space-y-6">
+<header class="bg-blue-800 text-white rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold">Dr. Lou Valmar T. Datu</h1>
+<h2 class="text-blue-200 mt-1">Clinical Summary System</h2>
+<!-- Export / Import Buttons -->
+<div class="mt-3 flex items-center space-x-3 text-sm font-medium">
+<button onclick="exportPresets()" class="bg-blue-900/50 hover:bg-blue-900 px-3 py-1 rounded border border-blue-700 transition-colors">
+↓ Export Presets
+</button>
+<label class="bg-blue-900/50 hover:bg-blue-900 px-3 py-1 rounded border border-blue-700 transition-colors cursor-pointer">
+↑ Import Presets
+<input type="file" id="importFile" accept=".json" class="hidden" onchange="importPresets(event)">
+</label>
+</div>
+</div>
+<button onclick="generateSummary()" class="mt-4 md:mt-0 bg-white text-blue-800 px-6 py-3 rounded-lg font-bold shadow hover:bg-blue-50 transition-colors">
+Generate Summary
+</button>
+</header>
 
-            </div>
-            <button onclick="generateSummary()" class="mt-4 md:mt-0 bg-white text-blue-800 px-6 py-3 rounded-lg font-bold shadow hover:bg-blue-50 transition-colors">
-                Generate Summary
-            </button>
-        </header>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">Patient Information</h3>
+</div>
+<div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">Patient Name</label>
+<input type="text" id="pat_name" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div class="flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">Age</label>
+<input type="text" id="pat_age" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div class="flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">Sex</label>
+<select id="pat_sex" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+<option value="">Select...</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+</select>
+</div>
+<div class="flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">Date</label>
+<input type="date" id="pat_date" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h3 class="text-lg font-bold text-slate-800">Patient Information</h3>
-            </div>
-            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="flex flex-col">
-                    <label class="mb-1 text-sm font-semibold text-slate-600">Patient Name</label>
-                    <input type="text" id="pat_name" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div class="flex flex-col">
-                    <label class="mb-1 text-sm font-semibold text-slate-600">Age</label>
-                    <input type="text" id="pat_age" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div class="flex flex-col">
-                    <label class="mb-1 text-sm font-semibold text-slate-600">Sex</label>
-                    <select id="pat_sex" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                        <option value="">Select...</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label class="mb-1 text-sm font-semibold text-slate-600">Date</label>
-                    <input type="date" id="pat_date" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-            </div>
-        </div>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">History of Present Illness (HPI)</h3>
+</div>
+<div class="p-6">
+<div class="flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">HPI Narrative</label>
+<textarea id="hpi_narrative" rows="5" placeholder="Type comprehensive HPI details here..." class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+</div>
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h3 class="text-lg font-bold text-slate-800">History of Present Illness (HPI)</h3>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Onset</label><input type="text" id="hpi_onset" placeholder="e.g. 2 days ago" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Location</label><input type="text" id="hpi_location" placeholder="e.g. Lower right abdomen" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Severity</label><input type="text" id="hpi_severity" placeholder="e.g. 8/10, Mild/Severe" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Duration</label><input type="text" id="hpi_duration" placeholder="e.g. Intermittent for 4 hrs" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Medication Taken</label><input type="text" id="hpi_medication" placeholder="e.g. Paracetamol 500mg" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Consultation Done</label><input type="text" id="hpi_consultation" placeholder="e.g. Local clinic, none" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                </div>
-                <div class="flex flex-col mb-4"><label class="mb-1 text-sm font-semibold text-slate-600">Associated Signs and Symptoms</label><textarea id="hpi_symptoms" rows="2" placeholder="List any other associated symptoms..." class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>
-                <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Others (Custom HPI Narrative)</label><textarea id="hpi_others" rows="3" placeholder="Type custom HPI details here..." class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea></div>
-            </div>
-        </div>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">Past Medical, Family & Social History</h3>
+</div>
+<div class="p-6 space-y-6" id="history_container">
+<!-- Dynamically populated via JS for Presets -->
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h3 class="text-lg font-bold text-slate-800">Past Medical, Family & Social History</h3>
-            </div>
-            <div class="p-6 space-y-6" id="history_container">
-                <!-- Dynamically populated via JS for Presets -->
-            </div>
-        </div>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">General Survey</h3>
+</div>
+<div class="p-6">
+<div id="gs_container" class="space-y-6"></div>
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h3 class="text-lg font-bold text-slate-800">Physical Examination on Admission</h3>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">HR (bpm)</label><input type="text" id="vit_hr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">BP (mmHg)</label><input type="text" id="vit_bp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">RR (cpm)</label><input type="text" id="vit_rr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Temp (°C)</label><input type="text" id="vit_temp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                </div>
-                <div id="pe_container" class="space-y-6"></div>
-            </div>
-        </div>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">Physical Examination on Admission</h3>
+</div>
+<div class="p-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8 bg-blue-50 p-4 rounded-lg border border-blue-100">
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">BP (mmHg)</label><input type="text" id="vit_bp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">HR (bpm)</label><input type="text" id="vit_hr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">RR (cpm)</label><input type="text" id="vit_rr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Temp (°C)</label><input type="text" id="vit_temp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">O2 Sat (%)</label><input type="text" id="vit_o2" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Height (cm)</label><input type="text" id="vit_ht" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Weight (kg)</label><input type="text" id="vit_wt" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+</div>
+<div id="pe_container" class="space-y-6"></div>
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
-            </div>
-            <div class="p-6">
-                <div id="ros_container" class="space-y-6"></div>
-            </div>
-        </div>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
+</div>
+<div class="p-6">
+<div id="ros_container" class="space-y-6"></div>
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                <h3 class="text-lg font-bold text-slate-800">Physician Orders</h3>
-            </div>
-            <div class="p-6 space-y-6" id="orders_container">
-                <!-- Dynamically populated via JS -->
-            </div>
-        </div>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6 border-t-4 border-t-blue-800 p-6">
+<div class="flex flex-col md:flex-row items-center justify-between">
+<div class="flex-1 w-full md:w-auto md:mr-8 mb-4 md:mb-0" id="rod_container">
+<!-- Dynamically populated via JS for ROD Presets -->
+</div>
+<button onclick="generateSummary()" class="w-full md:w-auto mt-4 bg-blue-600 text-white px-8 py-3 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-colors text-lg whitespace-nowrap">
+Generate Summary
+</button>
+</div>
+</div>
+</div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6 border-t-4 border-t-blue-800 p-6">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="flex-1 w-full md:w-auto md:mr-8 mb-4 md:mb-0" id="rod_container">
-                    <!-- Dynamically populated via JS for ROD Presets -->
-                </div>
-                <button onclick="generateSummary()" class="w-full md:w-auto mt-4 bg-blue-600 text-white px-8 py-3 rounded-lg font-bold shadow-md hover:bg-blue-700 transition-colors text-lg whitespace-nowrap">
-                    Generate Summary
-                </button>
-            </div>
-        </div>
-    </div>
+<!-- Summary Modal -->
+<div id="summaryModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+<div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden fade-in">
+<div class="bg-blue-800 px-6 py-4 flex justify-between items-center text-white">
+<h3 class="text-xl font-bold">Generated Summary</h3>
+<button onclick="closeModal()" class="text-white hover:text-blue-200 text-3xl leading-none">&times;</button>
+</div>
+<div class="p-6 flex-1 overflow-y-auto">
+<pre id="summaryText" class="whitespace-pre-wrap font-mono text-sm bg-slate-50 p-4 rounded-lg border border-slate-200 text-slate-700"></pre>
+</div>
+<div class="p-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+<span id="copyStatus" class="text-sm font-semibold text-green-600"></span>
+<div class="space-x-3">
+<button onclick="closeModal()" class="px-4 py-2 border border-slate-300 rounded-lg font-semibold text-slate-600 hover:bg-slate-100">Close</button>
+<button onclick="copyToClipboard()" class="px-4 py-2 bg-blue-600 rounded-lg font-semibold text-white hover:bg-blue-700 shadow-sm">Copy to Clipboard</button>
+</div>
+</div>
+</div>
+</div>
 
-    <div id="summaryModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden fade-in">
-            <div class="bg-blue-800 px-6 py-4 flex justify-between items-center text-white">
-                <h3 class="text-xl font-bold">Generated Summary</h3>
-                <button onclick="closeModal()" class="text-white hover:text-blue-200 text-3xl leading-none">&times;</button>
-            </div>
-            <div class="p-6 flex-1 overflow-y-auto">
-                <pre id="summaryText" class="whitespace-pre-wrap font-mono text-sm bg-slate-50 p-4 rounded-lg border border-slate-200 text-slate-700"></pre>
-            </div>
-            <div class="p-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-                <span id="copyStatus" class="text-sm font-semibold text-green-600"></span>
-                <div class="space-x-3">
-                    <button onclick="closeModal()" class="px-4 py-2 border border-slate-300 rounded-lg font-semibold text-slate-600 hover:bg-slate-100">Close</button>
-                    <button onclick="copyToClipboard()" class="px-4 py-2 bg-blue-600 rounded-lg font-semibold text-white hover:bg-blue-700 shadow-sm">Copy to Clipboard</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Toast Notification for Saving Presets -->
-    <div id="saveToast" class="fixed bottom-[-50px] left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-all z-50 pointer-events-none flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-        </svg>
-        <span class="font-medium text-sm">Preset saved to your browser!</span>
-    </div>
+<!-- Toast Notification -->
+<div id="saveToast" class="fixed bottom-[-50px] left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-all z-50 pointer-events-none flex items-center gap-2">
+<span id="toastIcon" class="text-green-400">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+<span class="font-medium text-sm">Preset saved to your browser!</span>
+</div>
 
-    <script>
-        // Data Configuration
-        const PE_CATEGORIES = {
-            general: { label: 'General Survey', options: ['Awake and alert', 'Altered sensorium'] },
-            heent: { label: 'HEENT', options: ['Essentially normal', 'Abnormal pupillary reaction', 'Cervical lymphadenopathy', 'Dry mucous membrane', 'Icteric sclerae', 'Pale conjunctivae', 'Sunken eyeballs', 'Sunken fontanelle'] },
-            chest: { label: 'Chest/Lungs', options: ['Essentially normal', 'Lump/s over breast(s)', 'Asymmetrical chest expansion', 'Rales/crackles/rhonchi', 'Decreased breath sounds', 'Intercostal rib/clavicular retraction', 'Wheezes'] },
-            cvs: { label: 'CVS', options: ['Essentially normal', 'Irregular rhythm', 'Displaced apex beat', 'Muffled heart sounds', 'Heaves and/or thrills', 'Murmur', 'Pericardial bulge'] },
-            abdomen: { label: 'Abdomen', options: ['Essentially normal', 'Palpable mass(es)', 'Abdominal rigidity', 'Tympanitic/dull abdomen', 'Abdomen tenderness', 'Hyperactive bowel sounds'] },
-            gu: { label: 'GU (IE)', options: ['Essentially normal', 'Blood stained in exam finger', 'Uterine contraction', 'Cervical dilatation', 'Presence of abnormal discharge'] },
-            skin: { label: 'Skin/Extremities', options: ['Essentially normal', 'Clubbing', 'Cold clammy skin', 'Cyanosis/mottled skin', 'Edema/swelling', 'Decreased mobility', 'Pale nailbeds', 'Poor skin turgor', 'Rashes/petechiae', 'Weak pulses'] },
-            neuro: { label: 'Neuro-Exam', options: ['Essentially normal', 'Abnormal gait', 'Abnormal position sense', 'Abnormal/decreased sensation', 'Abnormal reflex(es)', 'Poor/altered memory', 'Poor muscle tone/strength', 'Poor coordination'] }
-        };
+<script>
+// Data Configuration
+const GS_CATEGORIES = {
+general: { label: 'General Survey Findings', options: ['Awake and alert', 'Altered sensorium'] }
+};
 
-        // Updated ROS based on requirements
-        const ROS_CATEGORIES = {
-            constitutional: { label: 'Constitutional', options: ['UNREMARKABLE', 'BODY MALAISE', 'ANOREXIA', 'FEVER', 'WEIGHT LOSS'] },
-            respiratory: { label: 'Respiratory', options: ['UNREMARKABLE', 'COUGH', 'DIFFICULTY OF BREATHING / DYSPNEA', 'HEMOPTYSIS', 'CYANOSIS'] },
-            hematology: { label: 'Hematology/Lymphatics', options: ['UNREMARKABLE', 'GUM BLEEDING', 'HEMATOMA/ECCHYMOSIS', 'LYMPHADENOPATHY'] },
-            heent: { 
-                label: 'HEENT', 
-                options: [
-                    'UNREMARKABLE', 'EPISTAXIS / NOSE BLEEDING', 'JAUNDICE', 'ICTERISIA', 'LOSS OF SMELL', 'REDNESS OF CONJUNCTIVAE', 
-                    'TINNITUS (LEFT)', 'TINNITUS (RIGHT)', 'BLURRING OF VISION (LEFT)', 'BLURRING OF VISION (RIGHT)', 
-                    'DEAFNESS (LEFT)', 'DEAFNESS (RIGHT)', 'EYE DISCHARGE (LEFT)', 'EYE DISCHARGE (RIGHT)', 
-                    'SORE THROAT', 'MASS ON THE NECK', 'DIFFICULTY SWALLOWING'
-                ] 
-            },
-            cardiovascular: { label: 'Cardiovascular', options: ['UNREMARKABLE', 'CHEST PAIN', 'ORTHOPNEA', 'EDEMA OF LOWER EXTREMITIES', 'PALPITATIONS'] },
-            integumentary: { label: 'Integumentary', options: ['UNREMARKABLE', 'PALLOR', 'ITCHINESS', 'ULCERATIONS', 'SCALING', 'ECCHYMOSIS', 'RASH'] },
-            genitourinary: { label: 'Genitourinary', options: ['DYSURIA', 'FREQUENCY OF URINATION', 'HEMATURIA', 'URGENCY/DRIBBLING'] },
-            psychosocial: { label: 'Psycho-Social', options: ['UNREMARKABLE', 'FLAT AFFECT', 'DEPRESSED', 'WITHDRAWN', 'EXCITED'] },
-            abdomen: { label: 'Abdomen', options: ['UNREMARKABLE', 'MELENA', 'ABDOMEN CRAMPS', 'VOMITING', 'CONSTIPATION', 'HEARTBURN', 'DIARRHEA', 'FLATULENCE', 'HEMATEMESIS', 'ABDOMINAL DISTENSION'] },
-            endocrine: { label: 'Endocrine', options: ['UNREMARKABLE', 'COLD SWEATS', 'POLYPHAGIA', 'POLYDIPSIA', 'POLYURIA', 'INTOLERANCE TO HEAT', 'INTOLERANCE TO COLD', 'FATIGUE'] },
-            neurologic: { label: 'Neurologic', options: ['UNREMARKABLE', 'SEIZURE', 'ALTERED MENTAL SENSORIUM', 'SLURRED SPEECH', 'DIZZINESS / VERTIGO', 'NUMBNESS / LOSS OF SENSATION', 'PARALYSIS', 'HEADACHE', 'IRRITABILITY', 'TREMORS'] }
-        };
+const PE_CATEGORIES = {
+heent: { label: 'HEENT', options: ['Essentially normal', 'Abnormal pupillary reaction', 'Cervical lymphadenopathy', 'Dry mucous membrane', 'Icteric sclerae', 'Pale conjunctivae', 'Sunken eyeballs', 'Sunken fontanelle', 'Tonsillar congestion'] },
+chest: { label: 'Chest/Lungs', options: ['Essentially normal', 'Lump/s over breast(s)', 'Asymmetrical chest expansion', 'Rales/crackles/rhonchi', 'Decreased breath sounds', 'Intercostal rib/clavicular retraction', 'Wheezes'] },
+cvs: { label: 'CVS', options: ['Essentially normal', 'Irregular rhythm', 'Displaced apex beat', 'Muffled heart sounds', 'Heaves and/or thrills', 'Murmur', 'Pericardial bulge'] },
+abdomen: { label: 'Abdomen', options: ['Essentially normal', 'Palpable mass(es)', 'Abdominal rigidity', 'Tympanitic/dull abdomen', 'Abdomen tenderness', 'Hyperactive bowel sounds', 'Uterine contraction'] },
+gu: { label: 'GU (IE)', options: ['Essentially normal', 'Blood stained in exam finger', 'Cervical dilatation', 'Presence of abnormal discharge'] },
+skin: { label: 'Skin/Extremities', options: ['Essentially normal', 'Clubbing', 'Cold clammy skin', 'Cyanosis/mottled skin', 'Edema/swelling', 'Decreased mobility', 'Pale nailbeds', 'Poor skin turgor', 'Rashes/petechiae', 'Weak pulses'] },
+neuro: { label: 'Neuro-Exam', options: ['Essentially normal', 'Abnormal gait', 'Abnormal position sense', 'Abnormal/decreased sensation', 'Abnormal reflex(es)', 'Poor/altered memory', 'Poor muscle tone/strength', 'Poor coordination'] }
+};
 
-        // Configuration for the Preset UI Sections
-        const HISTORY_FIELDS_CONFIG = [
-            { key: 'pmh', label: 'Past Medical History (PMH)', placeholder: 'e.g. Hypertension, Type 2 Diabetes...', type: 'textarea' },
-            { key: 'home_meds', label: 'HMedications', placeholder: 'e.g. Losartan 50mg OD, Metformin 500mg BID...', type: 'textarea' },
-            { key: 'fmh', label: 'Family Medical History (FMH)', placeholder: 'e.g. Asthma, Cancer...', type: 'textarea' },
-            { key: 'psh', label: 'Personal and Social History (PSH)', placeholder: 'e.g. Appendectomy 2010...', type: 'textarea' }
-        ];
+// Updated ROS based on requirements
+const ROS_CATEGORIES = {
+constitutional: { label: 'Constitutional', options: ['UNREMARKABLE', 'BODY MALAISE', 'ANOREXIA', 'FEVER', 'WEIGHT LOSS'] },
+respiratory: { label: 'Respiratory', options: ['UNREMARKABLE', 'COUGH', 'DIFFICULTY OF BREATHING / DYSPNEA', 'HEMOPTYSIS', 'CYANOSIS'] },
+hematology: { label: 'Hematology/Lymphatics', options: ['UNREMARKABLE', 'GUM BLEEDING', 'HEMATOMA/ECCHYMOSIS', 'LYMPHADENOPATHY'] },
+heent: {
+label: 'HEENT',
+options: [
+'UNREMARKABLE', 'EPISTAXIS / NOSE BLEEDING', 'JAUNDICE', 'ICTERISIA', 'LOSS OF SMELL', 'REDNESS OF CONJUNCTIVAE',
+'TINNITUS (LEFT)', 'TINNITUS (RIGHT)', 'BLURRING OF VISION (LEFT)', 'BLURRING OF VISION (RIGHT)',
+'DEAFNESS (LEFT)', 'DEAFNESS (RIGHT)', 'EYE DISCHARGE (LEFT)', 'EYE DISCHARGE (RIGHT)',
+'SORE THROAT', 'MASS ON THE NECK', 'DIFFICULTY SWALLOWING'
+]
+},
+cardiovascular: { label: 'Cardiovascular', options: ['UNREMARKABLE', 'CHEST PAIN', 'ORTHOPNEA', 'EDEMA OF LOWER EXTREMITIES', 'PALPITATIONS'] },
+integumentary: { label: 'Integumentary', options: ['UNREMARKABLE', 'PALLOR', 'ITCHINESS', 'ULCERATIONS', 'SCALING', 'ECCHYMOSIS', 'RASH'] },
+genitourinary: { label: 'Genitourinary', options: ['DYSURIA', 'FREQUENCY OF URINATION', 'HEMATURIA', 'URGENCY/DRIBBLING'] },
+psychosocial: { label: 'Psycho-Social', options: ['UNREMARKABLE', 'FLAT AFFECT', 'DEPRESSED', 'WITHDRAWN', 'EXCITED'] },
+abdomen: { label: 'Abdomen', options: ['UNREMARKABLE', 'MELENA', 'ABDOMEN CRAMPS', 'VOMITING', 'CONSTIPATION', 'HEARTBURN', 'DIARRHEA', 'FLATULENCE', 'HEMATEMESIS', 'ABDOMINAL DISTENSION'] },
+endocrine: { label: 'Endocrine', options: ['UNREMARKABLE', 'COLD SWEATS', 'POLYPHAGIA', 'POLYDIPSIA', 'POLYURIA', 'INTOLERANCE TO HEAT', 'INTOLERANCE TO COLD', 'FATIGUE'] },
+neurologic: { label: 'Neurologic', options: ['UNREMARKABLE', 'SEIZURE', 'ALTERED MENTAL SENSORIUM', 'SLURRED SPEECH', 'DIZZINESS / VERTIGO', 'NUMBNESS / LOSS OF SENSATION', 'PARALYSIS', 'HEADACHE', 'IRRITABILITY', 'TREMORS'] }
+};
 
-        const ORDER_FIELDS_CONFIG = [
-            { key: 'diet', label: 'Diet', placeholder: 'e.g. NPO, DAT', type: 'input' },
-            { key: 'ivf', label: 'IVF', placeholder: 'e.g. PNSS 1L @ 30gtts/min', type: 'input' },
-            { key: 'lab', label: 'Laboratory', placeholder: 'e.g. CBC, Urinalysis...', type: 'textarea' },
-            { key: 'diagnostics', label: 'Diagnostics', placeholder: 'e.g. Chest X-ray, ECG...', type: 'textarea' },
-            { key: 'medicines', label: 'Medicines', placeholder: 'e.g. Omeprazole 40mg IV OD...', type: 'textarea' }
-        ];
+// Configuration for the Preset UI Sections
+const HISTORY_FIELDS_CONFIG = [
+{ key: 'pmh', label: 'Past Medical History (PMH)', placeholder: 'e.g. Hypertension, Type 2 Diabetes...', type: 'textarea' },
+{ key: 'home_meds', label: 'Medications', placeholder: 'e.g. Losartan 50mg OD, Metformin 500mg BID...', type: 'textarea' },
+{ key: 'fmh', label: 'Family Medical History (FMH)', placeholder: 'e.g. Asthma, Cancer...', type: 'textarea' },
+{ key: 'psh', label: 'Personal and Social History (PSH)', placeholder: 'e.g. Appendectomy 2010...', type: 'textarea' }
+];
 
-        const ROD_FIELD_CONFIG = [
-            { key: 'rod', label: 'Resident on Duty (ROD)', placeholder: 'e.g. Dr. Juan Dela Cruz', type: 'input' }
-        ];
+const ROD_FIELD_CONFIG = [
+{ key: 'rod', label: 'Resident on Duty (ROD)', placeholder: 'e.g. Dr. Juan Dela Cruz', type: 'input' }
+];
 
-        // Global State for Presets (expanded to include History and ROD)
-        window.orderPresets = {
-            diet: ['NPO', 'DAT', 'Clear Liquids', 'Soft Diet'],
-            ivf: ['PNSS 1L @ 30gtts/min', 'D5LR 1L @ 30gtts/min', 'Heplock'],
-            lab: ['CBC', 'Urinalysis', 'Fecalysis', 'Na, K, Cl', 'Creatinine'],
-            diagnostics: ['Chest X-ray (PA)', 'ECG 12-Lead', 'Whole Abdomen Ultrasound'],
-            medicines: ['Paracetamol 500mg tab', 'Omeprazole 40mg IV OD', 'Ceftriaxone 1g IV OD'],
-            pmh: ['Hypertension', 'Diabetes Mellitus Type 2', 'Bronchial Asthma', 'None'],
-            home_meds: ['Amlodipine 5mg tab OD', 'Losartan 50mg tab OD', 'None'],
-            fmh: ['Hypertension', 'Diabetes', 'Cancer', 'Asthma', 'None'],
-            psh: ['Appendectomy', 'Cesarean Section', 'None'],
-            rod: ['Dr. Juan Dela Cruz']
-        };
+// Global State for Presets (Orders Removed)
+window.orderPresets = {
+pmh: ['Hypertension', 'Diabetes Mellitus Type 2', 'Bronchial Asthma', 'None'],
+home_meds: ['Amlodipine 5mg tab OD', 'Losartan 50mg tab OD', 'None'],
+fmh: ['Hypertension', 'Diabetes', 'Cancer', 'Asthma', 'None'],
+psh: ['Appendectomy', 'Cesarean Section', 'None'],
+rod: ['Dr. Juan Dela Cruz']
+};
 
-        // --- LOCAL STORAGE LOGIC ---
-        function loadPresets() {
-            const savedData = localStorage.getItem('clinical_summary_presets');
-            if (savedData) {
-                try {
-                    const parsedData = JSON.parse(savedData);
-                    // Merge saved presets with default keys
-                    window.orderPresets = { ...window.orderPresets, ...parsedData };
-                } catch (e) {
-                    console.error("Error loading presets from Local Storage", e);
-                }
-            }
-            window.renderAllPresets();
-        }
+// --- LOCAL STORAGE LOGIC ---
+function loadPresets() {
+const savedData = localStorage.getItem('clinical_summary_presets');
+if (savedData) {
+try {
+const parsedData = JSON.parse(savedData);
+// Merge saved presets with default keys
+window.orderPresets = { ...window.orderPresets, ...parsedData };
+} catch (e) {
+console.error("Error loading presets from Local Storage", e);
+}
+}
+window.renderAllPresets();
+}
 
-        window.savePresetToCloud = function() {
-            try {
-                // Save directly to the browser's local storage
-                localStorage.setItem('clinical_summary_presets', JSON.stringify(window.orderPresets));
-                showToast();
-            } catch (e) {
-                console.error("Failed to save to Local Storage", e);
-            }
-        };
+window.savePresetToCloud = function() {
+try {
+// Save directly to the browser's local storage
+localStorage.setItem('clinical_summary_presets', JSON.stringify(window.orderPresets));
+showToast("Preset saved to your browser!");
+} catch (e) {
+console.error("Failed to save to Local Storage", e);
+}
+};
 
-        // --- EXPORT / IMPORT LOGIC ---
-        window.exportPresets = function() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.orderPresets));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "clinical_presets.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        };
+// --- EXPORT / IMPORT LOGIC ---
+window.exportPresets = function() {
+const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.orderPresets));
+const downloadAnchorNode = document.createElement('a');
+downloadAnchorNode.setAttribute("href", dataStr);
+downloadAnchorNode.setAttribute("download", "clinical_presets.json");
+document.body.appendChild(downloadAnchorNode);
+downloadAnchorNode.click();
+downloadAnchorNode.remove();
+};
 
-        window.importPresets = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    window.orderPresets = { ...window.orderPresets, ...importedData };
-                    localStorage.setItem('clinical_summary_presets', JSON.stringify(window.orderPresets));
-                    window.renderAllPresets();
-                    
-                    // Show a quick custom alert/toast (Reusing the toast but changing text temporarily)
-                    const toast = document.getElementById('saveToast');
-                    const originalText = toast.querySelector('span').innerText;
-                    toast.querySelector('span').innerText = "Presets imported successfully!";
-                    showToast();
-                    setTimeout(() => { toast.querySelector('span').innerText = originalText; }, 3000);
-                    
-                } catch (err) {
-                    // Alert is okay here for error handling a bad file upload
-                    alert("Invalid file format. Please upload a valid JSON presets file.");
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = ''; // Reset input
-        };
+window.importPresets = function(event) {
+const file = event.target.files[0];
+if (!file) return;
+const reader = new FileReader();
+reader.onload = function(e) {
+try {
+const importedData = JSON.parse(e.target.result);
+window.orderPresets = { ...window.orderPresets, ...importedData };
+localStorage.setItem('clinical_summary_presets', JSON.stringify(window.orderPresets));
+window.renderAllPresets();
+showToast("Presets imported successfully!");
+} catch (err) {
+showToast("Invalid file format. Please upload a valid JSON file.", true);
+}
+};
+reader.readAsText(file);
+event.target.value = ''; // Reset input
+};
 
-        function showToast() {
-            const toast = document.getElementById('saveToast');
-            toast.classList.remove('toast-show');
-            // Trigger reflow
-            void toast.offsetWidth;
-            toast.classList.add('toast-show');
-            setTimeout(() => {
-                toast.classList.remove('toast-show');
-            }, 3000);
-        }
-        // ---------------------------
+function showToast(message, isError = false) {
+const toast = document.getElementById('saveToast');
+const msgEl = document.getElementById('toastMessage');
+const iconEl = document.getElementById('toastIcon');
 
-        function renderCheckboxGroup(containerId, dataObj, prefix) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            let html = '';
-            for (const [key, cat] of Object.entries(dataObj)) {
-                html += `
-                <div class="mb-6 last:mb-0">
-                    <h4 class="text-md font-bold text-blue-800 mb-3 border-b border-slate-100 pb-2">${cat.label}</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">`;
-                
-                cat.options.forEach((opt, idx) => {
-                    const id = `${prefix}_${key}_${idx}`;
-                    html += `
-                    <label class="flex items-start space-x-3 cursor-pointer group">
-                        <div class="flex items-center h-5">
-                            <input type="checkbox" name="${prefix}_${key}" value="${opt}" id="${id}" class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
-                        </div>
-                        <div class="text-sm text-slate-700 group-hover:text-slate-900 leading-tight pt-0.5">${opt}</div>
-                    </label>`;
-                });
+msgEl.innerText = message;
+if (isError) {
+iconEl.classList.replace('text-green-400', 'text-red-400');
+iconEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
+} else {
+iconEl.classList.replace('text-red-400', 'text-green-400');
+iconEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
+}
 
-                html += `
-                    </div>
-                    <div class="flex items-center space-x-2 mt-2">
-                        <span class="text-sm font-semibold text-slate-600 whitespace-nowrap">Others:</span>
-                        <input type="text" id="${prefix}_${key}_others" placeholder="Specify other findings..." class="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800">
-                    </div>
-                </div>`;
-            }
-            container.innerHTML = html;
-        }
+toast.classList.remove('toast-show');
+// Trigger reflow
+void toast.offsetWidth;
+toast.classList.add('toast-show');
+setTimeout(() => {
+toast.classList.remove('toast-show');
+}, 3000);
+}
+// ---------------------------
 
-        function renderPresetFields(containerId, fieldsConfig) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            let html = '';
-            fieldsConfig.forEach(field => {
-                const onKeyPressAttr = `onkeypress="if(event.key === 'Enter') { event.preventDefault(); addPreset('${field.key}'); }"`;
-                const inputHtml = field.type === 'input' 
-                    ? `<input type="text" id="field_${field.key}" ${onKeyPressAttr} placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
-                    : `<textarea id="field_${field.key}" rows="2" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-slate-800 transition-shadow"></textarea>`;
-                
-                html += `
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm ${fieldsConfig.length === 1 ? 'border-0 p-0 shadow-none bg-transparent' : ''}">
-                    <div class="flex flex-col md:flex-row gap-4 items-start">
-                        <div class="flex-1 w-full flex flex-col">
-                            <label class="mb-1 text-sm font-semibold text-slate-600">${field.label}</label>
-                            ${inputHtml}
-                        </div>
-                        <button onclick="addPreset('${field.key}')" class="mt-0 md:mt-6 w-full md:w-auto px-4 py-2 bg-white hover:bg-slate-100 text-blue-700 text-sm font-bold rounded-lg border border-blue-200 transition-colors shadow-sm whitespace-nowrap">
-                            + Save as Preset
-                        </button>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-200">
-                        <div class="flex flex-wrap items-center gap-2" id="preset_list_${field.key}">
-                            <!-- Presets go here -->
-                        </div>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML = html;
-        }
+function renderCheckboxGroup(containerId, dataObj, prefix) {
+const container = document.getElementById(containerId);
+if (!container) return;
+let html = '';
+for (const [key, cat] of Object.entries(dataObj)) {
+html += `
+<div class="mb-6 last:mb-0">
+<h4 class="text-md font-bold text-blue-800 mb-3 border-b border-slate-100 pb-2">${cat.label}</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">`;
+cat.options.forEach((opt, idx) => {
+const id = `${prefix}_${key}_${idx}`;
+html += `
+<label class="flex items-start space-x-3 cursor-pointer group">
+<div class="flex items-center h-5">
+<input type="checkbox" name="${prefix}_${key}" value="${opt}" id="${id}" class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
+</div>
+<div class="text-sm text-slate-700 group-hover:text-slate-900 leading-tight pt-0.5">${opt}</div>
+</label>`;
+});
 
-        window.renderAllPresets = function() {
-            const allConfigs = [...HISTORY_FIELDS_CONFIG, ...ORDER_FIELDS_CONFIG, ...ROD_FIELD_CONFIG];
-            allConfigs.forEach(field => {
-                const container = document.getElementById(`preset_list_${field.key}`);
-                if (!container) return;
-                
-                // Initialize default array if missing from cloud data
-                if (!window.orderPresets[field.key]) {
-                    window.orderPresets[field.key] = [];
-                }
-                
-                const presets = window.orderPresets[field.key];
-                let html = `<span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Presets:</span>`;
-                
-                if (presets.length === 0) {
-                    html += `<span class="text-xs text-slate-400 italic">No presets saved yet.</span>`;
-                } else {
-                    presets.forEach(preset => {
-                        const safePreset = preset.replace(/'/g, "\\'");
-                        html += `
-                        <span onclick="appendToOrder('${field.key}', '${safePreset}', '${field.type}')" 
-                              class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full cursor-pointer hover:bg-blue-200 border border-blue-200 transition-colors shadow-sm"
-                              title="Click to add">
-                            ${preset}
-                        </span>`;
-                    });
-                }
-                container.innerHTML = html;
-            });
-        };
+html += `
+</div>
+<div class="flex items-center space-x-2 mt-2">
+<span class="text-sm font-semibold text-slate-600 whitespace-nowrap">Others:</span>
+<input type="text" id="${prefix}_${key}_others" placeholder="Specify other findings..." class="flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800">
+</div>
+</div>`;
+}
+container.innerHTML = html;
+}
 
-        window.addPreset = function(category) {
-            const inputEl = document.getElementById(`field_${category}`);
-            const val = inputEl.value.trim();
-            if (!val) return;
+function renderPresetFields(containerId, fieldsConfig) {
+const container = document.getElementById(containerId);
+if (!container) return;
+let html = '';
+fieldsConfig.forEach(field => {
+const onKeyPressAttr = `onkeypress="if(event.key === 'Enter') { event.preventDefault(); addPreset('${field.key}'); }"`;
+const inputHtml = field.type === 'input'
+? `<input type="text" id="field_${field.key}" ${onKeyPressAttr} placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
+: `<textarea id="field_${field.key}" rows="2" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-slate-800 transition-shadow"></textarea>`;
+html += `
+<div class="p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm ${fieldsConfig.length === 1 ? 'border-0 p-0 shadow-none bg-transparent' : ''}">
+<div class="flex flex-col md:flex-row gap-4 items-start">
+<div class="flex-1 w-full flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">${field.label}</label>
+${inputHtml}
+</div>
+<button onclick="addPreset('${field.key}')" class="mt-0 md:mt-6 w-full md:w-auto px-4 py-2 bg-white hover:bg-slate-100 text-blue-700 text-sm font-bold rounded-lg border border-blue-200 transition-colors shadow-sm whitespace-nowrap">
++ Save as Preset
+</button>
+</div>
+<div class="mt-4 pt-3 border-t border-slate-200">
+<div class="flex flex-wrap items-center gap-2" id="preset_list_${field.key}">
+<!-- Presets go here -->
+</div>
+</div>
+</div>`;
+});
+container.innerHTML = html;
+}
 
-            if (!window.orderPresets[category]) window.orderPresets[category] = [];
-            
-            if (!window.orderPresets[category].includes(val)) {
-                window.orderPresets[category].push(val);
-                window.renderAllPresets();
-                // Persist to Cloud if Firebase is active
-                if (typeof window.savePresetToCloud === 'function') {
-                    window.savePresetToCloud();
-                }
-            }
-        };
+window.renderAllPresets = function() {
+const allConfigs = [...HISTORY_FIELDS_CONFIG, ...ROD_FIELD_CONFIG];
+allConfigs.forEach(field => {
+const container = document.getElementById(`preset_list_${field.key}`);
+if (!container) return;
+// Initialize default array if missing from cloud data
+if (!window.orderPresets[field.key]) {
+window.orderPresets[field.key] = [];
+}
+const presets = window.orderPresets[field.key];
+let html = `<span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Presets:</span>`;
+if (presets.length === 0) {
+html += `<span class="text-xs text-slate-400 italic">No presets saved yet.</span>`;
+} else {
+presets.forEach(preset => {
+const safePreset = preset.replace(/'/g, "\\'");
+html += `
+<span onclick="appendToOrder('${field.key}', '${safePreset}', '${field.type}')"
+class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full cursor-pointer hover:bg-blue-200 border border-blue-200 transition-colors shadow-sm"
+title="Click to add">
+${preset}
+</span>`;
+});
+}
+container.innerHTML = html;
+});
+};
 
-        window.appendToOrder = function(category, text, type) {
-            const inputEl = document.getElementById(`field_${category}`);
-            const currentVal = inputEl.value.trim();
-            // Textareas separate by newline, inputs by comma (except for ROD where it usually replaces)
-            let separator = (type === 'textarea') ? '\n' : ', ';
-            if (category === 'rod') separator = ''; // Usually only 1 ROD
-            
-            if (currentVal && category !== 'rod') {
-                inputEl.value = currentVal + separator + text;
-            } else {
-                inputEl.value = text;
-            }
-        };
+window.addPreset = function(category) {
+const inputEl = document.getElementById(`field_${category}`);
+const val = inputEl.value.trim();
+if (!val) return;
 
-        window.generateSummary = function() {
-            let summary = `DR. LOU VALMAR T. DATU - CLINICAL SUMMARY\n`;
-            summary += `==========================================================\n\n`;
-            
-            // Collect Demographics
-            summary += `PATIENT INFORMATION:\n`;
-            summary += `Name: ${document.getElementById('pat_name').value || 'N/A'}\n`;
-            summary += `Age/Sex: ${document.getElementById('pat_age').value || 'N/A'} / ${document.getElementById('pat_sex').value || 'N/A'}\n`;
-            summary += `Date: ${document.getElementById('pat_date').value || 'N/A'}\n\n`;
+if (!window.orderPresets[category]) window.orderPresets[category] = [];
+if (!window.orderPresets[category].includes(val)) {
+window.orderPresets[category].push(val);
+window.renderAllPresets();
+// Persist to Cloud if Firebase is active
+if (typeof window.savePresetToCloud === 'function') {
+window.savePresetToCloud();
+}
+}
+};
 
-            // Collect HPI
-            summary += `HISTORY OF PRESENT ILLNESS (HPI):\n`;
-            const hpiFields = [
-                { id: 'hpi_onset', label: 'Onset' }, { id: 'hpi_location', label: 'Location' },
-                { id: 'hpi_severity', label: 'Severity' }, { id: 'hpi_duration', label: 'Duration' },
-                { id: 'hpi_medication', label: 'Medication Taken' }, { id: 'hpi_consultation', label: 'Consultation Done' }
-            ];
-            
-            let hasHpi = false;
-            hpiFields.forEach(f => {
-                const val = document.getElementById(f.id).value.trim();
-                if (val) {
-                    summary += `- ${f.label}: ${val}\n`;
-                    hasHpi = true;
-                }
-            });
-            const hpiSymptoms = document.getElementById('hpi_symptoms').value.trim();
-            if (hpiSymptoms) {
-                summary += `- Associated Signs & Symptoms: ${hpiSymptoms}\n`;
-                hasHpi = true;
-            }
-            const hpiOthers = document.getElementById('hpi_others').value.trim();
-            if (hpiOthers) {
-                summary += `Narrative / Others:\n${hpiOthers}\n`;
-                hasHpi = true;
-            }
-            if (!hasHpi) summary += `N/A\n`;
-            summary += `\n`;
+window.appendToOrder = function(category, text, type) {
+const inputEl = document.getElementById(`field_${category}`);
+const currentVal = inputEl.value.trim();
+// Textareas separate by newline, inputs by comma (except for ROD where it usually replaces)
+let separator = (type === 'textarea') ? '\n' : ', ';
+if (category === 'rod') separator = ''; // Usually only 1 ROD
+if (currentVal && category !== 'rod') {
+inputEl.value = currentVal + separator + text;
+} else {
+inputEl.value = text;
+}
+};
 
-            // Collect New History Fields (PMH, Meds, FMH, PSH)
-            summary += `PAST MEDICAL, FAMILY & SOCIAL HISTORY:\n`;
-            HISTORY_FIELDS_CONFIG.forEach(field => {
-                summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
-            });
-            summary += `\n`;
+window.generateSummary = function() {
+let summary = `DR. LOU VALMAR T. DATU - CLINICAL SUMMARY\n`;
+summary += `==========================================================\n\n`;
+// Collect Demographics
+summary += `PATIENT INFORMATION:\n`;
+summary += `Name: ${document.getElementById('pat_name').value || 'N/A'}\n`;
+summary += `Age/Sex: ${document.getElementById('pat_age').value || 'N/A'} / ${document.getElementById('pat_sex').value || 'N/A'}\n`;
+summary += `Date: ${document.getElementById('pat_date').value || 'N/A'}\n\n`;
 
-            // Collect PE
-            summary += `PHYSICAL EXAMINATION ON ADMISSION:\n`;
-            summary += `- Vital Signs: HR: ${document.getElementById('vit_hr').value || '___'} | BP: ${document.getElementById('vit_bp').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'}\n`;
-            
-            let peHasEntries = false;
-            Object.keys(PE_CATEGORIES).forEach(key => {
-                const checkboxes = document.querySelectorAll(`input[name="pe_${key}"]:checked`);
-                const othersVal = document.getElementById(`pe_${key}_others`).value.trim();
-                
-                if (checkboxes.length > 0 || othersVal) {
-                    peHasEntries = true;
-                    let findings = Array.from(checkboxes).map(cb => cb.value);
-                    if (othersVal) findings.push(`Others: ${othersVal}`);
-                    summary += `- ${PE_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
-                } else {
-                    summary += `- ${PE_CATEGORIES[key].label}: Essentially normal\n`;
-                    peHasEntries = true;
-                }
-            });
-            if (!peHasEntries) summary += `- No significant findings noted.\n`;
-            summary += `\n`;
+// Collect HPI (Simplified to just narrative)
+summary += `HISTORY OF PRESENT ILLNESS (HPI):\n`;
+const hpiNarrative = document.getElementById('hpi_narrative').value.trim();
+if (hpiNarrative) {
+summary += `${hpiNarrative}\n`;
+} else {
+summary += `N/A\n`;
+}
+summary += `\n`;
 
-            // Collect ROS
-            summary += `REVIEW OF SYSTEMS:\n`;
-            let rosHasEntries = false;
-            Object.keys(ROS_CATEGORIES).forEach(key => {
-                const checkboxes = document.querySelectorAll(`input[name="ros_${key}"]:checked`);
-                const othersVal = document.getElementById(`ros_${key}_others`).value.trim();
-                
-                if (checkboxes.length > 0 || othersVal) {
-                    rosHasEntries = true;
-                    let findings = Array.from(checkboxes).map(cb => cb.value);
-                    if (othersVal) findings.push(`Others: ${othersVal}`);
-                    summary += `- ${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
-                } else {
-                    summary += `- ${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
-                    rosHasEntries = true;
-                }
-            });
-            if (!rosHasEntries) summary += `- No significant findings noted.\n`;
-            summary += `\n`;
+// Collect New History Fields (PMH, Meds, FMH, PSH)
+summary += `PAST MEDICAL, FAMILY & SOCIAL HISTORY:\n`;
+HISTORY_FIELDS_CONFIG.forEach(field => {
+summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
+});
+summary += `\n`;
 
-            // Collect Orders
-            summary += `PHYSICIAN ORDERS:\n`;
-            ORDER_FIELDS_CONFIG.forEach(field => {
-                summary += `- ${field.label}: ${document.getElementById(`field_${field.key}`).value.trim() || 'N/A'}\n`;
-            });
-            summary += `\n`;
+// Collect General Survey
+summary += `GENERAL SURVEY:\n`;
+let gsHasEntries = false;
+Object.keys(GS_CATEGORIES).forEach(key => {
+const checkboxes = document.querySelectorAll(`input[name="gs_${key}"]:checked`);
+const othersVal = document.getElementById(`gs_${key}_others`).value.trim();
+if (checkboxes.length > 0 || othersVal) {
+gsHasEntries = true;
+let findings = Array.from(checkboxes).map(cb => cb.value);
+if (othersVal) findings.push(`Others: ${othersVal}`);
+summary += `- ${findings.join(', ')}\n`;
+}
+});
+if (!gsHasEntries) summary += `- Awake and alert\n`;
+summary += `\n`;
 
-            // Collect ROD
-            summary += `==========================================================\n`;
-            summary += `ROD (Resident on Duty): ${document.getElementById('field_rod').value.trim() || 'N/A'}\n`;
+// Collect PE
+summary += `PHYSICAL EXAMINATION ON ADMISSION:\n`;
+summary += `- Vital Signs: BP: ${document.getElementById('vit_bp').value || '___'} | HR: ${document.getElementById('vit_hr').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'} | O2 Sat: ${document.getElementById('vit_o2').value || '___'} | Height: ${document.getElementById('vit_ht').value || '___'} | Weight: ${document.getElementById('vit_wt').value || '___'}\n`;
+let peHasEntries = false;
+Object.keys(PE_CATEGORIES).forEach(key => {
+const checkboxes = document.querySelectorAll(`input[name="pe_${key}"]:checked`);
+const othersVal = document.getElementById(`pe_${key}_others`).value.trim();
+if (checkboxes.length > 0 || othersVal) {
+peHasEntries = true;
+let findings = Array.from(checkboxes).map(cb => cb.value);
+if (othersVal) findings.push(`Others: ${othersVal}`);
+summary += `- ${PE_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+} else {
+summary += `- ${PE_CATEGORIES[key].label}: Essentially normal\n`;
+peHasEntries = true;
+}
+});
+if (!peHasEntries) summary += `- No significant findings noted.\n`;
+summary += `\n`;
 
-            // Show Modal
-            document.getElementById('summaryText').innerText = summary;
-            document.getElementById('copyStatus').innerText = '';
-            const modal = document.getElementById('summaryModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
+// Collect ROS
+summary += `REVIEW OF SYSTEMS:\n`;
+let rosHasEntries = false;
+Object.keys(ROS_CATEGORIES).forEach(key => {
+const checkboxes = document.querySelectorAll(`input[name="ros_${key}"]:checked`);
+const othersVal = document.getElementById(`ros_${key}_others`).value.trim();
+if (checkboxes.length > 0 || othersVal) {
+rosHasEntries = true;
+let findings = Array.from(checkboxes).map(cb => cb.value);
+if (othersVal) findings.push(`Others: ${othersVal}`);
+summary += `- ${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+} else {
+summary += `- ${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
+rosHasEntries = true;
+}
+});
+if (!rosHasEntries) summary += `- No significant findings noted.\n`;
+summary += `\n`;
 
-        window.closeModal = function() {
-            const modal = document.getElementById('summaryModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
+// Collect ROD
+summary += `==========================================================\n`;
+summary += `ROD (Resident on Duty): ${document.getElementById('field_rod').value.trim() || 'N/A'}\n`;
 
-        window.copyToClipboard = function() {
-            const text = document.getElementById('summaryText').innerText;
-            const statusEl = document.getElementById('copyStatus');
-            
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text)
-                    .then(() => statusEl.innerText = 'Copied to clipboard!')
-                    .catch(() => fallbackCopy(text, statusEl));
-            } else {
-                fallbackCopy(text, statusEl);
-            }
-        };
+// Show Modal
+document.getElementById('summaryText').innerText = summary;
+document.getElementById('copyStatus').innerText = '';
+const modal = document.getElementById('summaryModal');
+modal.classList.remove('hidden');
+modal.classList.add('flex');
+};
 
-        function fallbackCopy(text, statusEl) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                statusEl.innerText = 'Copied to clipboard!';
-            } catch (err) {
-                statusEl.innerText = 'Failed to copy. Please select manually.';
-                statusEl.classList.replace('text-green-600', 'text-red-500');
-            }
-            document.body.removeChild(textArea);
-        }
+window.closeModal = function() {
+const modal = document.getElementById('summaryModal');
+modal.classList.add('hidden');
+modal.classList.remove('flex');
+};
 
-        // Initialize UI
-        renderCheckboxGroup('pe_container', PE_CATEGORIES, 'pe');
-        renderCheckboxGroup('ros_container', ROS_CATEGORIES, 'ros');
-        renderPresetFields('history_container', HISTORY_FIELDS_CONFIG);
-        renderPresetFields('orders_container', ORDER_FIELDS_CONFIG);
-        renderPresetFields('rod_container', ROD_FIELD_CONFIG);
-        
-        // Load presets from Local Storage and render
-        loadPresets();
-    </script>
+window.copyToClipboard = function() {
+const text = document.getElementById('summaryText').innerText;
+const statusEl = document.getElementById('copyStatus');
+if (navigator.clipboard && window.isSecureContext) {
+navigator.clipboard.writeText(text)
+.then(() => statusEl.innerText = 'Copied to clipboard!')
+.catch(() => fallbackCopy(text, statusEl));
+} else {
+fallbackCopy(text, statusEl);
+}
+};
+
+function fallbackCopy(text, statusEl) {
+const textArea = document.createElement("textarea");
+textArea.value = text;
+textArea.style.position = "fixed";
+textArea.style.left = "-999999px";
+document.body.appendChild(textArea);
+textArea.select();
+try {
+document.execCommand('copy');
+statusEl.innerText = 'Copied to clipboard!';
+} catch (err) {
+statusEl.innerText = 'Failed to copy. Please select manually.';
+statusEl.classList.replace('text-green-600', 'text-red-500');
+}
+document.body.removeChild(textArea);
+}
+
+// Initialize UI
+renderCheckboxGroup('gs_container', GS_CATEGORIES, 'gs');
+renderCheckboxGroup('pe_container', PE_CATEGORIES, 'pe');
+renderCheckboxGroup('ros_container', ROS_CATEGORIES, 'ros');
+renderPresetFields('history_container', HISTORY_FIELDS_CONFIG);
+renderPresetFields('rod_container', ROD_FIELD_CONFIG);
+// Load presets from Local Storage and render
+loadPresets();
+</script>
 </body>
 </html>
