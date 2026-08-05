@@ -111,8 +111,8 @@ Generate Summary
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">RR (cpm)</label><input type="text" id="vit_rr" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Temp (°C)</label><input type="text" id="vit_temp" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">O2 Sat (%)</label><input type="text" id="vit_o2" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Weight (kg)</label><input type="text" id="vit_ht" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Height (cm)</label><input type="text" id="vit_wt" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Weight (kg)</label><input type="text" id="vit_wt" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Height (cm)</label><input type="text" id="vit_ht" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 </div>
 
 <!-- 3-9. HEENT to Neuro -->
@@ -320,7 +320,7 @@ summary += `General Survey: Awake and alert\n`;
 }
 
 // 2. Vital Signs
-summary += `Vital Signs: BP: ${document.getElementById('vit_bp').value || '___'} | HR: ${document.getElementById('vit_hr').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'} | O2 Sat: ${document.getElementById('vit_o2').value || '___'} | Height: ${document.getElementById('vit_ht').value || '___'} | Weight: ${document.getElementById('vit_wt').value || '___'}\n`;
+summary += `Vital Signs: BP: ${document.getElementById('vit_bp').value || '___'} | HR: ${document.getElementById('vit_hr').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'} | O2 Sat: ${document.getElementById('vit_o2').value || '___'} | Weight: ${document.getElementById('vit_wt').value || '___'} | Height: ${document.getElementById('vit_ht').value || '___'}\n`;
 
 // 3-9. HEENT to Neuro
 let peHasEntries = false;
