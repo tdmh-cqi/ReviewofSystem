@@ -108,6 +108,15 @@ Generate Summary
 
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
 <div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
+<h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
+</div>
+<div class="p-6">
+<div id="ros_container" class="space-y-6"></div>
+</div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
 <h3 class="text-lg font-bold text-slate-800">Physical Examination on Admission</h3>
 </div>
 <div class="p-6">
@@ -121,15 +130,6 @@ Generate Summary
 <div class="flex flex-col"><label class="mb-1 text-sm font-semibold text-slate-600">Weight (kg)</label><input type="text" id="vit_wt" class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
 </div>
 <div id="pe_container" class="space-y-6"></div>
-</div>
-</div>
-
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-<div class="bg-slate-50 border-b border-slate-200 px-6 py-4">
-<h3 class="text-lg font-bold text-slate-800">Review of Systems</h3>
-</div>
-<div class="p-6">
-<div id="ros_container" class="space-y-6"></div>
 </div>
 </div>
 
@@ -471,6 +471,25 @@ summary += `- ${findings.join(', ')}\n`;
 if (!gsHasEntries) summary += `- Awake and alert\n`;
 summary += `\n`;
 
+// Collect ROS
+summary += `REVIEW OF SYSTEMS:\n`;
+let rosHasEntries = false;
+Object.keys(ROS_CATEGORIES).forEach(key => {
+const checkboxes = document.querySelectorAll(`input[name="ros_${key}"]:checked`);
+const othersVal = document.getElementById(`ros_${key}_others`).value.trim();
+if (checkboxes.length > 0 || othersVal) {
+rosHasEntries = true;
+let findings = Array.from(checkboxes).map(cb => cb.value);
+if (othersVal) findings.push(`Others: ${othersVal}`);
+summary += `- ${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
+} else {
+summary += `- ${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
+rosHasEntries = true;
+}
+});
+if (!rosHasEntries) summary += `- No significant findings noted.\n`;
+summary += `\n`;
+
 // Collect PE
 summary += `PHYSICAL EXAMINATION ON ADMISSION:\n`;
 summary += `- Vital Signs: BP: ${document.getElementById('vit_bp').value || '___'} | HR: ${document.getElementById('vit_hr').value || '___'} | RR: ${document.getElementById('vit_rr').value || '___'} | Temp: ${document.getElementById('vit_temp').value || '___'} | O2 Sat: ${document.getElementById('vit_o2').value || '___'} | Height: ${document.getElementById('vit_ht').value || '___'} | Weight: ${document.getElementById('vit_wt').value || '___'}\n`;
@@ -489,25 +508,6 @@ peHasEntries = true;
 }
 });
 if (!peHasEntries) summary += `- No significant findings noted.\n`;
-summary += `\n`;
-
-// Collect ROS
-summary += `REVIEW OF SYSTEMS:\n`;
-let rosHasEntries = false;
-Object.keys(ROS_CATEGORIES).forEach(key => {
-const checkboxes = document.querySelectorAll(`input[name="ros_${key}"]:checked`);
-const othersVal = document.getElementById(`ros_${key}_others`).value.trim();
-if (checkboxes.length > 0 || othersVal) {
-rosHasEntries = true;
-let findings = Array.from(checkboxes).map(cb => cb.value);
-if (othersVal) findings.push(`Others: ${othersVal}`);
-summary += `- ${ROS_CATEGORIES[key].label}: ${findings.join(', ')}\n`;
-} else {
-summary += `- ${ROS_CATEGORIES[key].label}: UNREMARKABLE\n`;
-rosHasEntries = true;
-}
-});
-if (!rosHasEntries) summary += `- No significant findings noted.\n`;
 summary += `\n`;
 
 // Collect ROD
