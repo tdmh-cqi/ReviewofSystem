@@ -203,6 +203,117 @@ const ROD_FIELD_CONFIG = [
 { key: 'rod', label: 'Resident on Duty (ROD)', placeholder: 'e.g. Dr. Juan Dela Cruz', type: 'input' }
 ];
 
+// --- PRESET MANAGEMENT LOGIC ---
+window.appPresets = {};
+
+function loadPresets() {
+const saved = localStorage.getItem('clinical_summary_presets_v3');
+if (saved) {
+try { window.appPresets = JSON.parse(saved); } catch (e) { console.error("Could not load presets", e); }
+}
+}
+
+function savePresets() {
+localStorage.setItem('clinical_summary_presets_v3', JSON.stringify(window.appPresets));
+}
+
+function renderPresetFields(containerId, fieldsConfig) {
+const container = document.getElementById(containerId);
+if (!container) return;
+let html = '';
+fieldsConfig.forEach(field => {
+// Ensure array exists for this field
+if (!window.appPresets[field.key]) window.appPresets[field.key] = [];
+
+const inputHtml = field.type === 'input'
+? `<input type="text" id="field_${field.key}" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
+: `<textarea id="field_${field.key}" rows="2" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-slate-800 transition-shadow"></textarea>`;
+
+html += `
+<div class="p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm ${fieldsConfig.length === 1 ? 'border-0 p-0 shadow-none bg-transparent' : ''}">
+<div class="flex flex-col md:flex-row gap-4 items-start">
+<div class="flex-1 w-full flex flex-col">
+<label class="mb-1 text-sm font-semibold text-slate-600">${field.label}</label>
+${inputHtml}
+</div>
+<button onclick="addPreset('${field.key}')" class="mt-0 md:mt-6 w-full md:w-auto px-4 py-2 bg-white hover:bg-slate-100 text-blue-700 text-sm font-bold rounded-lg border border-blue-200 transition-colors shadow-sm whitespace-nowrap">
++ Save as Preset
+</button>
+</div>
+<div class="mt-4 pt-3 border-t border-slate-200">
+<div class="flex flex-wrap items-center gap-2" id="preset_list_${field.key}">
+<!-- Presets injected here via JS -->
+</div>
+</div>
+</div>`;
+});
+container.innerHTML = html;
+}
+
+window.renderAllPresets = function() {
+const allConfigs = [...HISTORY_FIELDS_CONFIG, ...ROD_FIELD_CONFIG];
+allConfigs.forEach(field => {
+const container = document.getElementById(`preset_list_${field.key}`);
+if (!container) return;
+const presets = window.appPresets[field.key] || [];
+let html = `<span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Presets:</span>`;
+if (presets.length === 0) {
+html += `<span class="text-xs text-slate-400 italic">No presets saved yet.</span>`;
+} else {
+presets.forEach((preset, idx) => {
+const safePreset = preset.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+html += `
+<div class="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200 shadow-sm overflow-hidden group">
+<span onclick="appendToField('${field.key}', '${safePreset}', '${field.type}')"
+class="px-3 py-1 cursor-pointer hover:bg-blue-200 transition-colors" title="Click to add">
+${preset}
+</span>
+<button onclick="removePreset('${field.key}', ${idx})"
+class="px-2 py-1 bg-blue-200 hover:bg-red-500 hover:text-white transition-colors border-l border-blue-300 group-hover:border-transparent text-blue-900" title="Delete preset">
+&times;
+</button>
+</div>`;
+});
+}
+container.innerHTML = html;
+});
+};
+
+window.addPreset = function(key) {
+const inputEl = document.getElementById(`field_${key}`);
+if(!inputEl) return;
+const val = inputEl.value.trim();
+if(!val) return;
+if(!window.appPresets[key]) window.appPresets[key] = [];
+if(!window.appPresets[key].includes(val)) {
+window.appPresets[key].push(val);
+savePresets();
+renderAllPresets();
+}
+};
+
+window.removePreset = function(key, idx) {
+if(window.appPresets[key] && window.appPresets[key].length > idx) {
+window.appPresets[key].splice(idx, 1);
+savePresets();
+renderAllPresets();
+}
+};
+
+window.appendToField = function(key, text, type) {
+const inputEl = document.getElementById(`field_${key}`);
+if(!inputEl) return;
+const currentVal = inputEl.value.trim();
+let separator = (type === 'textarea') ? '\n' : ', ';
+if (key === 'rod') separator = ''; // Usually only 1 ROD
+if (currentVal && key !== 'rod') {
+inputEl.value = currentVal + separator + text;
+} else {
+inputEl.value = text;
+}
+};
+// --- END PRESET LOGIC ---
+
 function renderCheckboxGroup(containerId, dataObj, prefix) {
 const container = document.getElementById(containerId);
 if (!container) return;
@@ -231,25 +342,6 @@ html += `
 </div>
 </div>`;
 }
-container.innerHTML = html;
-}
-
-function renderFormFields(containerId, fieldsConfig) {
-const container = document.getElementById(containerId);
-if (!container) return;
-let html = '';
-fieldsConfig.forEach(field => {
-const inputHtml = field.type === 'input'
-? `<input type="text" id="field_${field.key}" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 transition-shadow">`
-: `<textarea id="field_${field.key}" rows="2" placeholder="${field.placeholder}" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y text-slate-800 transition-shadow"></textarea>`;
-html += `
-<div class="p-4 bg-slate-50 rounded-xl border border-slate-200 shadow-sm ${fieldsConfig.length === 1 ? 'border-0 p-0 shadow-none bg-transparent' : ''}">
-<div class="flex flex-col w-full">
-<label class="mb-1 text-sm font-semibold text-slate-600">${field.label}</label>
-${inputHtml}
-</div>
-</div>`;
-});
 container.innerHTML = html;
 }
 
@@ -388,11 +480,13 @@ document.body.removeChild(textArea);
 }
 
 // Initialize UI
-renderCheckboxGroup('gs_container', GS_CATEGORIES, 'gs');
-renderCheckboxGroup('pe_container', PE_CATEGORIES, 'pe');
+loadPresets(); // Load presets from local storage first
+renderCheckboxGroup('gs_container', GS_CATEGORIES, 'gs'); // ADDED: General Survey rendering
 renderCheckboxGroup('ros_container', ROS_CATEGORIES, 'ros');
-renderFormFields('history_container', HISTORY_FIELDS_CONFIG);
-renderFormFields('rod_container', ROD_FIELD_CONFIG);
+renderCheckboxGroup('pe_container', PE_CATEGORIES, 'pe');
+renderPresetFields('history_container', HISTORY_FIELDS_CONFIG);
+renderPresetFields('rod_container', ROD_FIELD_CONFIG);
+renderAllPresets(); // Render the loaded presets
 </script>
 </body>
 </html>
